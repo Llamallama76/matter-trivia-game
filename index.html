@@ -1220,7 +1220,7 @@
         <rect x="70" y="85" width="25" height="25" rx="4" fill="#bae6fd" stroke="#38bdf8" stroke-width="1.5"/>
         <rect x="50" y="160" width="50" height="22" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
         <text x="75" y="175" font-size="11" font-weight="bold" fill="#10b981" text-anchor="middle">120 g</text>
-        <text x="75" y="200" font-size="10" fill="#94a3b8" text-anchor="middle">Solid Ice</text>
+        <text x="75" y="200" font-size="10" fill="#94a3b8" text-anchor="middle">Solid Ice Inside</text>
       </g>
       <!-- Melting Arrow -->
       <g transform="translate(180, 80)">
@@ -1236,17 +1236,17 @@
         <path d="M 22 100 Q 75 95, 128 100 L 128 148 Q 128 148, 22 148 Z" fill="#0284c7" fill-opacity="0.4"/>
         <rect x="50" y="160" width="50" height="22" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
         <text x="75" y="175" font-size="11" font-weight="bold" fill="#10b981" text-anchor="middle">? g</text>
-        <text x="75" y="200" font-size="10" fill="#38bdf8" text-anchor="middle">Liquid Water</text>
+        <text x="75" y="200" font-size="10" fill="#38bdf8" text-anchor="middle">Liquid Water Inside</text>
       </g>
     </svg>`,
-        question: "A student places 120 grams of ice cubes into an airtight sealed plastic container. The container is left in a warm room until all the ice completely melts into liquid water. What is the total mass of the liquid water and container?",
+        question: "A student places 120 grams of ice cubes into an airtight sealed plastic container. The container is left in a warm room until all the ice completely melts into liquid water. What is the total mass of the liquid water inside?",
         options: [
           { text: "Exactly 120 grams because mass is conserved during physical phase changes", correct: true },
           { text: "Less than 120 grams because liquids have lower mass than solids", correct: false },
           { text: "More than 120 grams because thermal energy added mass to the water", correct: false },
           { text: "0 grams because the ice dissolved into water vapor", correct: false }
         ],
-        explanation: "Matter cannot be created or destroyed. In a closed system, melting does not change the amount of matter, so the mass remains exactly 120 grams."
+        explanation: "Matter cannot be created or destroyed. In a closed system, melting does not change the amount of matter, so the mass of the water remains exactly 120 grams."
       },
       {
         id: "MAT-DOK2-03",
@@ -1482,19 +1482,19 @@
         dok: 2,
         category: "Measuring & Properties",
         type: "svg",
-        visualPayload: `<svg viewBox="0 0 380 200" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+        visualPayload: `<svg viewBox="0 0 400 200" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
       <!-- Graduated Cylinder with 3 layers -->
-      <g transform="translate(140, 20)">
+      <g transform="translate(130, 20)">
         <rect x="20" y="20" width="60" height="150" rx="4" fill="#0f172a" stroke="#cbd5e1" stroke-width="2"/>
         <!-- Layer 1: Corn Syrup (bottom) -->
         <rect x="22" y="125" width="56" height="43" fill="#ca8a04" fill-opacity="0.8"/>
-        <text x="85" y="145" font-size="9" fill="#facc15" text-anchor="start">Corn Syrup (1.4 g/mL)</text>
+        <text x="85" y="145" font-size="9" font-weight="bold" fill="#facc15" text-anchor="start">Corn Syrup (Most Dense)</text>
         <!-- Layer 2: Water (middle) -->
         <rect x="22" y="80" width="56" height="45" fill="#0284c7" fill-opacity="0.5"/>
-        <text x="85" y="105" font-size="9" fill="#38bdf8" text-anchor="start">Water (1.0 g/mL)</text>
+        <text x="85" y="105" font-size="9" font-weight="bold" fill="#38bdf8" text-anchor="start">Water (Medium Density)</text>
         <!-- Layer 3: Oil (top) -->
         <rect x="22" y="35" width="56" height="45" fill="#eab308" fill-opacity="0.4"/>
-        <text x="85" y="60" font-size="9" fill="#fde047" text-anchor="start">Vegetable Oil (0.9 g/mL)</text>
+        <text x="85" y="60" font-size="9" font-weight="bold" fill="#fde047" text-anchor="start">Vegetable Oil (Least Dense)</text>
       </g>
     </svg>`,
         question: "A student gently pours three liquids into a cylinder: vegetable oil, water, and corn syrup. The liquids settle into three distinct layers as shown. If a plastic bead that is less dense than water but more dense than vegetable oil is dropped into the cylinder, where will it settle?",
@@ -1504,7 +1504,7 @@
           { text: "Floating on top of the vegetable oil at the very surface", correct: false },
           { text: "Completely dissolved evenly throughout all three liquid layers", correct: false }
         ],
-        explanation: "An object sinks through liquids less dense than itself (oil) and floats on liquids more dense than itself (water), resting at the boundary."
+        explanation: "An object sinks through liquids less dense than itself (oil) and floats on liquids more dense than itself (water), coming to rest at the boundary between them."
       },
       {
         id: "MAT-DOK2-12",
