@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matter Lab Challenge | Interactive Classroom Science Trivia</title>
+  <meta name="description" content="2-Team Elementary Science Trivia Challenge designed for whole-class display on an interactive board." />
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-deep: #0b0f19;
+      --bg-slate: #1e293b;
+      --cyan-neon: #06b6d4;
+      --emerald-neon: #10b981;
+      --amber-neon: #f59e0b;
+      --ruby-neon: #f43f5e;
+      --slate-board: #141c24;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 50% 15%, #1e293b 0%, #0b0f19 75%);
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* High-visibility chalkboard-feel headers */
+    .font-chalk {
+      font-family: 'Trebuchet MS', 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif;
+      letter-spacing: 0.03em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7), 0 0 12px rgba(255, 255, 255, 0.12);
+    }
+
+    .font-mono-digital {
+      font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Tactile Slate Chalkboard Texture & Brushed Metal/Wood Frame */
+    .chalkboard-frame {
+      background: linear-gradient(145deg, #475569 0%, #334155 25%, #1e293b 50%, #334155 75%, #64748b 100%);
+      padding: 12px;
+      border-radius: 1.5rem;
+      box-shadow:
+        0 25px 60px -15px rgba(0, 0, 0, 0.85),
+        inset 0 2px 3px rgba(255, 255, 255, 0.25),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.7);
+      border: 2px solid #64748b;
+      position: relative;
+    }
+
+    .chalkboard-frame.wood-accent {
+      background: linear-gradient(135deg, #5c4033 0%, #3e2723 45%, #4e342e 70%, #6d4c41 100%);
+      border-color: #8d6e63;
+    }
+
+    .chalkboard-surface {
+      background-color: #131d24;
+      background-image:
+        radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0),
+        radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 0),
+        linear-gradient(180deg, rgba(15, 23, 42, 0.5) 0%, rgba(20, 32, 38, 0.75) 100%);
+      background-size: 24px 24px, 11px 11px, 100% 100%;
+      background-position: 0 0, 6px 6px, 0 0;
+      border-radius: 1rem;
+      box-shadow:
+        inset 0 0 45px rgba(0, 0, 0, 0.85),
+        inset 0 2px 10px rgba(0, 0, 0, 0.6);
+      border: 2px solid rgba(148, 163, 184, 0.18);
+      position: relative;
+    }
+
+    /* Chalk dust smudge subtle overlay */
+    .chalkboard-surface::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 1rem;
+      background:
+        radial-gradient(ellipse at 25% 30%, rgba(255, 255, 255, 0.035) 0%, transparent 55%),
+        radial-gradient(ellipse at 75% 70%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Active Turn Halos */
+    @keyframes pulseCyanHalo {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.45), 0 0 45px rgba(6, 182, 212, 0.2), inset 0 0 18px rgba(6, 182, 212, 0.2);
+        border-color: #06b6d4;
+      }
+      50% {
+        box-shadow: 0 0 35px rgba(6, 182, 212, 0.8), 0 0 70px rgba(6, 182, 212, 0.35), inset 0 0 25px rgba(6, 182, 212, 0.35);
+        border-color: #67e8f9;
+      }
+    }
+
+    @keyframes pulseTeam2Halo {
+      0%, 100% {
+        box-shadow: 0 0 22px rgba(245, 158, 11, 0.5), 0 0 48px rgba(244, 63, 94, 0.25), inset 0 0 18px rgba(245, 158, 11, 0.22);
+        border-color: #f59e0b;
+      }
+      50% {
+        box-shadow: 0 0 38px rgba(244, 63, 94, 0.85), 0 0 75px rgba(245, 158, 11, 0.45), inset 0 0 28px rgba(244, 63, 94, 0.35);
+        border-color: #fb7185;
+      }
+    }
+
+    @keyframes pulseStealAmber {
+      0%, 100% {
+        box-shadow: 0 0 26px rgba(245, 158, 11, 0.65), 0 0 55px rgba(244, 63, 94, 0.35), inset 0 0 22px rgba(245, 158, 11, 0.3);
+        border-color: #fbbf24;
+      }
+      50% {
+        box-shadow: 0 0 46px rgba(245, 158, 11, 1), 0 0 85px rgba(244, 63, 94, 0.55), inset 0 0 32px rgba(245, 158, 11, 0.45);
+        border-color: #fef08a;
+      }
+    }
+
+    .team-1-active {
+      animation: pulseCyanHalo 2.2s infinite ease-in-out;
+    }
+
+    .team-2-active {
+      animation: pulseTeam2Halo 2.2s infinite ease-in-out;
+    }
+
+    .team-steal-active {
+      animation: pulseStealAmber 1.3s infinite ease-in-out !important;
+    }
+
+    /* Answer Option Panels */
+    .option-card {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.88) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 3px solid rgba(148, 163, 184, 0.35);
+      box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .option-card:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.01);
+      border-color: #38bdf8;
+      box-shadow: 0 12px 28px -4px rgba(6, 182, 212, 0.35), inset 0 0 15px rgba(6, 182, 212, 0.12);
+      background: linear-gradient(180deg, rgba(30, 58, 78, 0.92) 0%, rgba(15, 23, 42, 0.98) 100%);
+    }
+
+    .option-card:active:not(:disabled) {
+      transform: translateY(1px) scale(0.995);
+    }
+
+    .option-correct {
+      background: linear-gradient(135deg, rgba(6, 95, 70, 0.95) 0%, rgba(4, 120, 87, 0.9) 100%) !important;
+      border-color: #34d399 !important;
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.75), inset 0 0 20px rgba(52, 211, 153, 0.35) !important;
+      transform: scale(1.02);
+    }
+
+    .option-revealed-gold {
+      background: linear-gradient(135deg, rgba(120, 53, 15, 0.95) 0%, rgba(6, 95, 70, 0.92) 100%) !important;
+      border-color: #fbbf24 !important;
+      box-shadow: 0 0 35px rgba(245, 158, 11, 0.75), inset 0 0 20px rgba(251, 191, 36, 0.35) !important;
+    }
+
+    .option-wrong {
+      background: linear-gradient(135deg, rgba(136, 19, 55, 0.9) 0%, rgba(76, 5, 25, 0.92) 100%) !important;
+      border-color: #f43f5e !important;
+      box-shadow: 0 0 30px rgba(244, 63, 94, 0.65), inset 0 0 15px rgba(244, 63, 94, 0.3) !important;
+      opacity: 0.78;
+    }
+
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    .animate-shake {
+      animation: shakeError 0.42s ease-in-out;
+    }
+
+    @keyframes popScore {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.22); filter: drop-shadow(0 0 24px currentColor); }
+      100% { transform: scale(1); }
+    }
+
+    .score-pop {
+      animation: popScore 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes floatUpFade {
+      0% { opacity: 0; transform: translateY(10px) scale(0.75); }
+      20% { opacity: 1; transform: translateY(-6px) scale(1.18); }
+      65% { opacity: 1; transform: translateY(-28px) scale(1.06); }
+      100% { opacity: 0; transform: translateY(-54px) scale(0.92); }
+    }
+
+    .floating-delta {
+      animation: floatUpFade 1.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes floatSparkParticle {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.6);
+      }
+      70% {
+        opacity: 0.95;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--tx, 0px), var(--ty, -65px)) scale(1.25);
+      }
+    }
+
+    .score-spark-particle {
+      position: absolute;
+      pointer-events: none;
+      animation: floatSparkParticle 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Bubbling beaker animation */
+    @keyframes bubbleRise1 {
+      0% { transform: translateY(0) scale(0.8); opacity: 0.85; }
+      100% { transform: translateY(-22px) scale(1.2); opacity: 0; }
+    }
+    @keyframes bubbleRise2 {
+      0% { transform: translateY(0) scale(0.7); opacity: 0.9; }
+      100% { transform: translateY(-26px) scale(1.1); opacity: 0; }
+    }
+    .bubble-1 { animation: bubbleRise1 2.1s infinite ease-in; }
+    .bubble-2 { animation: bubbleRise2 2.7s infinite ease-in 0.7s; }
+    .bubble-3 { animation: bubbleRise1 1.8s infinite ease-in 1.3s; }
+
+    /* Orbiting atom animation */
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .orbit-spin {
+      transform-origin: center;
+      animation: spinSlow 9s linear infinite;
+    }
+    .orbit-spin-reverse {
+      transform-origin: center;
+      animation: spinSlow 7s linear infinite reverse;
+    }
+
+    /* Timer pulsing red alert */
+    @keyframes timerDangerPulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 18px #f43f5e; }
+      50% { opacity: 0.55; box-shadow: 0 0 32px #ff003c; }
+    }
+    .timer-danger {
+      animation: timerDangerPulse 0.55s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="flex flex-col justify-between min-h-screen p-3 md:p-5 lg:p-6 select-none">
+
+  <!-- TOP HEADER / CONTROL BAR -->
+  <header class="w-full max-w-[1800px] mx-auto mb-3 bg-slate-900/90 border-2 border-slate-700/80 rounded-2xl px-4 py-3 shadow-2xl backdrop-blur-md">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Left: Game Title & Beaker/Atom Icon -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-cyan-950/90 border-2 border-cyan-400/70 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+          <svg viewBox="0 0 64 64" class="w-9 h-9 md:w-10 md:h-10">
+            <!-- Sleek Lab Beaker + Atom Hybrid Icon -->
+            <ellipse cx="32" cy="32" rx="26" ry="10" fill="none" stroke="#06b6d4" stroke-width="2.5" stroke-dasharray="4 2" transform="rotate(-30 32 32)" />
+            <ellipse cx="32" cy="32" rx="26" ry="10" fill="none" stroke="#10b981" stroke-width="2.5" stroke-dasharray="4 2" transform="rotate(30 32 32)" />
+            <path d="M24 12 H40 M27 12 V24 L15 48 C13.5 51 15.5 54 19 54 H45 C48.5 54 50.5 51 49 48 L37 24 V12" fill="rgba(6,182,212,0.18)" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18 44 Q32 40 46 44 L48 49 C49 51 47.5 52.5 45 52.5 H19 C16.5 52.5 15 51 16 49 Z" fill="#10b981" />
+            <circle cx="28" cy="46" r="2.2" fill="#a7f3d0" class="bubble-1" />
+            <circle cx="36" cy="48" r="1.8" fill="#67e8f9" class="bubble-2" />
+            <circle cx="32" cy="28" r="3.5" fill="#f59e0b" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white font-chalk">
+              MATTER LAB <span class="text-cyan-400">CHALLENGE</span>
+            </h1>
+            <button id="board-style-btn" onclick="toggleFrameTheme()" title="Switch Chalkboard Frame (Brushed Metal / Classic Lab Wood)" class="hidden xl:inline-flex items-center px-2.5 py-1 text-xs font-bold uppercase tracking-wider rounded-md bg-slate-800 text-slate-300 border border-slate-600 hover:border-cyan-400 hover:text-cyan-300 transition">
+              Frame: <span id="frame-label" class="ml-1 text-cyan-400">Metal</span>
+            </button>
+          </div>
+          <p class="text-xs md:text-sm text-slate-300 font-medium tracking-wide">
+            GRADE 5 INTERACTIVE CLASSROOM SCIENCE ARENA
+          </p>
+        </div>
+      </div>
+
+      <!-- Center: Category / Benchmark Badge -->
+      <div class="flex items-center gap-2 bg-slate-950/90 border-2 border-cyan-500/50 rounded-xl px-4 py-2 shadow-[0_0_20px_rgba(6,182,212,0.18)]">
+        <span class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></span>
+        <span class="w-3 h-3 rounded-full bg-cyan-400 -ml-5"></span>
+        <div class="text-sm md:text-lg lg:text-xl font-bold tracking-wide text-cyan-100">
+          <span id="header-category">States &amp; Atomic Theory</span>
+          <span class="mx-2 text-cyan-500">|</span>
+          <span id="header-benchmark" class="font-mono-digital text-amber-400 font-extrabold">SC.5.P.8.1</span>
+          <span id="header-dok" class="ml-2 text-xs md:text-sm px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-600 font-mono-digital">DOK 2</span>
+        </div>
+      </div>
+
+      <!-- Right: Timer Widget + Sound Toggle + Reset Game -->
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Timer Selector -->
+        <div class="flex items-center bg-slate-950 border-2 border-slate-700 rounded-xl p-1 gap-1" role="group" aria-label="Timer Duration Selector">
+          <span class="text-xs md:text-sm font-bold text-slate-400 px-2.5 flex items-center gap-1">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>
+            TIMER:
+          </span>
+          <button id="timer-btn-0" onclick="setTimerMode(0)" class="px-3 py-1.5 rounded-lg text-sm md:text-base font-extrabold transition bg-cyan-500 text-slate-950 shadow">OFF</button>
+          <button id="timer-btn-15" onclick="setTimerMode(15)" class="px-3 py-1.5 rounded-lg text-sm md:text-base font-extrabold transition text-slate-300 hover:text-white hover:bg-slate-800">15s</button>
+          <button id="timer-btn-30" onclick="setTimerMode(30)" class="px-3 py-1.5 rounded-lg text-sm md:text-base font-extrabold transition text-slate-300 hover:text-white hover:bg-slate-800">30s</button>
+          <span id="timer-digital-readout" class="hidden font-mono-digital text-lg md:text-xl font-black px-2.5 text-emerald-400">30s</span>
+        </div>
+
+        <!-- Sound Toggle -->
+        <button id="sound-toggle-btn" onclick="toggleSound()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border-2 border-emerald-500/60 text-emerald-300 font-extrabold text-sm md:text-base transition shadow-md active:scale-95">
+          <span id="sound-icon">🔊</span>
+          <span id="sound-text">SOUND ON</span>
+        </button>
+
+        <!-- Reset Scores (with 2-Click Confirmation) -->
+        <button id="reset-scores-btn" onclick="handleResetScoresClick()" title="Reset Both Team Scores to 000 (Requires Confirmation Click)" class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-amber-950/90 border-2 border-slate-600 hover:border-amber-400 text-slate-200 hover:text-amber-200 font-extrabold text-xs md:text-sm transition shadow-md active:scale-95">
+          <svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span id="reset-scores-label">RESET SCORES</span>
+        </button>
+
+        <!-- Full Game Reset -->
+        <button id="reset-game-btn" onclick="resetGame()" title="Reset Full Game & Question Progress" class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-rose-950/90 border-2 border-slate-600 hover:border-rose-500 text-slate-200 hover:text-rose-200 font-extrabold text-xs md:text-sm transition shadow-md active:scale-95">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span>NEW GAME</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Animated Color-Shifting Countdown Bar -->
+    <div id="timer-bar-wrapper" class="w-full h-3.5 bg-slate-950 rounded-full mt-3 overflow-hidden border border-slate-700/80 hidden">
+      <div id="timer-bar-fill" class="h-full w-full bg-emerald-500 transition-all duration-100 rounded-full" style="width: 100%;"></div>
+    </div>
+  </header>
+
+  <!-- MAIN ARENA: LEFT FLANK (TEAM 1) + CENTER STAGE (SLATE BOARD) + RIGHT FLANK (TEAM 2) -->
+  <main class="w-full max-w-[1800px] mx-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-5 items-stretch">
+
+    <!-- LEFT FLANK: TEAM 1 SCOREKEEPER STATION ("Cyber Beakers") -->
+    <aside id="team-1-station" class="lg:col-span-3 bg-slate-900/95 border-4 border-cyan-500 rounded-3xl p-4 md:p-5 flex flex-col justify-between relative transition-all duration-300 team-1-active">
+      <!-- Active Turn Top Pill -->
+      <div class="flex items-center justify-between gap-2 mb-1">
+        <span class="px-3 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-widest bg-cyan-950 text-cyan-300 border border-cyan-500/50">
+          STATION 01
+        </span>
+        <span id="team-1-turn-badge" class="px-3.5 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-wider bg-cyan-400 text-slate-950 shadow-[0_0_15px_#06b6d4] animate-pulse">
+          ● ACTIVE TURN
+        </span>
+      </div>
+
+      <!-- Avatar Badge: Glowing Beaker with Bubbling Liquid -->
+      <div class="my-1.5 flex flex-col items-center">
+        <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl bg-slate-950/90 border-2 border-cyan-400/80 shadow-[0_0_30px_rgba(6,182,212,0.35)] flex items-center justify-center relative overflow-hidden">
+          <svg viewBox="0 0 100 100" class="w-20 h-20 md:w-24 md:h-24">
+            <defs>
+              <linearGradient id="cyberLiquid" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#22d3ee" />
+                <stop offset="100%" stop-color="#0284c7" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="58" r="34" fill="rgba(6, 182, 212, 0.15)" />
+            <path d="M24 62 Q50 56 76 62 L82 78 C84 84 80 88 73 88 H27 C20 88 16 84 18 78 Z" fill="url(#cyberLiquid)" />
+            <circle cx="38" cy="74" r="4" fill="#cffafe" class="bubble-1" />
+            <circle cx="55" cy="78" r="3.2" fill="#a5f3fc" class="bubble-2" />
+            <circle cx="64" cy="70" r="3.5" fill="#e0f2fe" class="bubble-3" />
+            <path d="M34 14 H66 M38 14 V34 L16 77 C13 83 18 90 26 90 H74 C82 90 87 83 84 77 L62 34 V14" fill="none" stroke="#e2e8f0" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+            <line x1="29" y1="56" x2="39" y2="56" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" />
+            <line x1="24" y1="68" x2="36" y2="68" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" />
+          </svg>
+        </div>
+
+        <!-- Editable & Selectable Team Name -->
+        <div class="mt-2.5 w-full text-center">
+          <label for="team-1-name-input" class="sr-only">Team 1 Name</label>
+          <input
+            id="team-1-name-input"
+            type="text"
+            value="Cyber Beakers"
+            maxlength="22"
+            aria-label="Team 1 Name"
+            class="w-full text-center bg-transparent hover:bg-slate-800/70 focus:bg-slate-950 text-2xl md:text-3xl font-black text-cyan-300 font-chalk rounded-xl px-2 py-0.5 border border-transparent hover:border-cyan-500/40 focus:border-cyan-400 focus:outline-none transition"
+          />
+          <div class="mt-1 flex items-center justify-center gap-1.5">
+            <select
+              id="team-1-preset"
+              onchange="applyTeamPreset(1, this.value)"
+              aria-label="Select preset name for Team 1"
+              class="bg-slate-950 text-slate-300 text-xs font-bold px-2.5 py-1 rounded-lg border border-slate-700 hover:border-cyan-400 focus:outline-none cursor-pointer"
+            >
+              <option value="Cyber Beakers">Preset: Cyber Beakers</option>
+              <option value="Plasma Pioneers">Preset: Plasma Pioneers</option>
+              <option value="Proton Chargers">Preset: Proton Chargers</option>
+              <option value="Astro Alchemists">Preset: Astro Alchemists</option>
+              <option value="Lab Legends">Preset: Lab Legends</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- HIGH-VISIBILITY DIGITAL SCOREKEEPER MODULE -->
+      <div class="my-2 bg-slate-950/95 border-2 border-cyan-500/60 rounded-2xl p-3.5 text-center relative shadow-[inset_0_2px_18px_rgba(0,0,0,0.85)]">
+        <div class="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-slate-400 px-1 mb-0.5">
+          <span>TEAM 01 SCORE</span>
+          <button onclick="toggleDirectScoreEdit(1)" title="Directly Edit Team 1 Score" class="text-slate-500 hover:text-cyan-300 transition flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+            <span class="text-[11px]">EDIT</span>
+          </button>
+        </div>
+
+        <!-- Extra-Large Tabular Monospace Score Readout -->
+        <div class="relative flex items-center justify-center py-1">
+          <div id="team-1-score" class="font-mono-digital text-6xl md:text-7xl xl:text-[5.25rem] leading-none font-black text-cyan-400 tracking-tight drop-shadow-[0_0_22px_rgba(6,182,212,0.55)]">
+            000
+          </div>
+          <!-- Float-up "+100" / "+50" Particle Burst Container -->
+          <div id="team-1-delta" class="pointer-events-none absolute inset-x-0 -top-2 text-3xl md:text-4xl font-black text-emerald-400 drop-shadow-[0_0_16px_rgba(16,185,129,0.9)] hidden">
+            +100
+          </div>
+          <div id="team-1-particles" class="pointer-events-none absolute inset-0 overflow-visible"></div>
+        </div>
+
+        <!-- Inline Direct Score Override Input (Hidden unless Teacher clicks Edit) -->
+        <div id="team-1-edit-row" class="hidden items-center justify-center gap-1.5 my-1.5">
+          <input id="team-1-direct-input" type="number" step="10" min="0" max="9999" class="w-24 bg-slate-900 border border-cyan-400 rounded-lg px-2 py-1 text-center font-mono-digital text-lg font-black text-cyan-200 focus:outline-none" />
+          <button onclick="applyDirectScoreEdit(1)" class="px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 font-black text-xs uppercase">SET</button>
+        </div>
+
+        <!-- Streak & Rounds Won Badges -->
+        <div class="mt-2 grid grid-cols-2 gap-2 bg-slate-900/90 border border-slate-800 rounded-xl p-2">
+          <div class="flex flex-col items-center border-r border-slate-800 pr-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">🔥 STREAK</span>
+            <strong id="team-1-streak" class="font-mono-digital text-lg md:text-xl font-black text-cyan-300">0</strong>
+          </div>
+          <div class="flex flex-col items-center pl-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">🏆 ROUNDS WON</span>
+            <strong id="team-1-rounds" class="font-mono-digital text-lg md:text-xl font-black text-emerald-300">0</strong>
+          </div>
+        </div>
+
+        <!-- Discreet Manual Teacher Override Controls (+/- pts) -->
+        <div class="mt-2.5 pt-2 border-t border-slate-800/90 flex items-center justify-between gap-1">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">TEACHER PTS:</span>
+          <div class="flex items-center gap-1">
+            <button onclick="adjustScore(1, -50)" title="Subtract 50 pts" class="px-2 py-1 rounded-md bg-slate-900 hover:bg-rose-950 text-slate-400 hover:text-rose-300 text-xs font-mono-digital font-bold border border-slate-800 hover:border-rose-500/50 transition">-50</button>
+            <button onclick="adjustScore(1, -10)" title="Subtract 10 pts" class="px-2 py-1 rounded-md bg-slate-900 hover:bg-rose-950 text-slate-400 hover:text-rose-300 text-xs font-mono-digital font-bold border border-slate-800 hover:border-rose-500/50 transition">-10</button>
+            <button onclick="adjustScore(1, 10)" title="Add +10 bonus pts (Great explanation!)" class="px-2 py-1 rounded-md bg-slate-900 hover:bg-emerald-950 text-slate-400 hover:text-emerald-300 text-xs font-mono-digital font-bold border border-slate-800 hover:border-emerald-500/50 transition">+10</button>
+            <button onclick="adjustScore(1, 50)" title="Add +50 pts" class="px-2 py-1 rounded-md bg-slate-900 hover:bg-emerald-950 text-slate-400 hover:text-emerald-300 text-xs font-mono-digital font-bold border border-slate-800 hover:border-emerald-500/50 transition">+50</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Station Footer Status -->
+      <div id="team-1-footer" class="text-center py-2 px-3 rounded-xl bg-cyan-950/60 border border-cyan-500/40 text-cyan-200 font-bold text-sm md:text-base">
+        Ready at Lab Station 1
+      </div>
+    </aside>
+
+    <!-- CENTER STAGE: THE SLATE BOARD -->
+    <section class="lg:col-span-6 flex flex-col">
+      <div id="chalkboard-outer-frame" class="chalkboard-frame flex-1 flex flex-col">
+        <div class="chalkboard-surface flex-1 p-4 md:p-6 lg:p-7 flex flex-col justify-between z-10">
+
+          <!-- Top Question Meta Bar inside Slate Board -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b-2 border-slate-700/80">
+            <div class="flex items-center gap-3">
+              <span id="question-counter-pill" class="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 border-2 border-cyan-400 text-cyan-200 font-mono-digital font-black text-base md:text-lg lg:text-xl">
+                QUESTION 1 OF 5
+              </span>
+              <!-- Quick question jump pills for teacher control -->
+              <div id="question-dots" class="hidden sm:flex items-center gap-1.5"></div>
+            </div>
+            <div id="media-type-badge" class="px-3 py-1 rounded-lg bg-slate-800/90 border border-slate-600 text-slate-300 text-xs md:text-sm font-bold uppercase tracking-wider">
+              3D PARTICLE SIMULATOR
+            </div>
+          </div>
+
+          <!-- Inquiry Prompt -->
+          <div class="my-2">
+            <p id="question-prompt" class="font-chalk text-xl sm:text-2xl md:text-3xl xl:text-[2rem] leading-snug font-bold text-white tracking-wide">
+              Loading inquiry prompt...
+            </p>
+          </div>
+
+          <!-- Dedicated Media Display Area ('text' | 'svg' | '3d-canvas' | 'image') -->
+          <div id="media-display-container" class="my-3 rounded-2xl bg-slate-950/85 border-2 border-slate-700/90 p-3 md:p-4 flex flex-col items-center justify-center relative overflow-hidden min-h-[190px] md:min-h-[220px] shadow-inner">
+            <!-- High-Resolution Laboratory Image Viewport Target (when type === 'image') -->
+            <div id="media-image-stage" class="w-full flex items-center justify-center hidden">
+              <div
+                id="media-image-frame"
+                onclick="openImageLightbox()"
+                role="button"
+                tabindex="0"
+                aria-label="Inspect high-resolution laboratory image in full-screen lightbox"
+                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openImageLightbox();}"
+                class="relative group inline-flex items-center justify-center rounded-xl border border-slate-700/60 bg-slate-950/90 shadow-[0_0_30px_rgba(6,182,212,0.18),0_10px_25px_-5px_rgba(0,0,0,0.8)] overflow-hidden cursor-zoom-in max-w-full transition-all duration-200 hover:border-cyan-400/70 hover:shadow-[0_0_38px_rgba(6,182,212,0.32)]"
+              >
+                <img
+                  id="question-image-el"
+                  src=""
+                  alt=""
+                  class="w-auto max-w-full max-h-[260px] md:max-h-[275px] object-contain rounded-xl select-none transition-transform duration-300 group-hover:scale-[1.015]"
+                />
+                <!-- Top-Right "Inspect / Enlarge" Icon Button Overlay -->
+                <button
+                  type="button"
+                  id="inspect-image-btn"
+                  onclick="event.stopPropagation(); openImageLightbox();"
+                  title="Inspect / Enlarge Image (Full-Screen Classroom View)"
+                  aria-label="Inspect or Enlarge Image"
+                  class="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/85 hover:bg-cyan-500 text-cyan-200 hover:text-slate-950 border border-slate-600/80 hover:border-cyan-300 text-xs md:text-sm font-extrabold tracking-wide shadow-lg backdrop-blur-md transition-all duration-150"
+                >
+                  <svg class="w-4 h-4 md:w-5 md:h-5 stroke-current" fill="none" stroke-width="2.4" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0zM11 8v6M8 11h6" />
+                  </svg>
+                  <span>INSPECT / ENLARGE</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- SVG Injection Target -->
+            <div id="media-svg-stage" class="w-full flex items-center justify-center hidden"></div>
+
+            <!-- 3D / 2D Interactive Particle Simulation Canvas Target -->
+            <div id="media-canvas-stage" class="w-full flex flex-col items-center justify-center hidden">
+              <canvas id="particle-canvas" width="560" height="190" class="w-full max-w-[560px] h-[175px] md:h-[195px] rounded-xl bg-slate-950 border border-slate-800 cursor-pointer" title="Click or tap inside the chamber to send a thermal energy wave through the particles!"></canvas>
+              <div class="w-full max-w-[560px] flex flex-wrap items-center justify-between gap-2 mt-2 px-1 text-xs md:text-sm text-slate-300">
+                <span id="canvas-sim-caption" class="font-bold text-cyan-300">
+                  Interactive Chamber: Click or tap particles to pulse kinetic energy
+                </span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-slate-400 font-semibold">Compare State:</span>
+                  <button onclick="setCanvasOverride('particles-solid')" id="sim-btn-solid" class="px-2.5 py-0.5 rounded bg-slate-800 hover:bg-cyan-900 text-cyan-200 border border-cyan-500/50 font-bold transition">Solid</button>
+                  <button onclick="setCanvasOverride('particles-liquid')" id="sim-btn-liquid" class="px-2.5 py-0.5 rounded bg-slate-800 hover:bg-cyan-900 text-cyan-200 border border-cyan-500/50 font-bold transition">Liquid</button>
+                  <button onclick="setCanvasOverride('particles-gas')" id="sim-btn-gas" class="px-2.5 py-0.5 rounded bg-slate-800 hover:bg-cyan-900 text-cyan-200 border border-cyan-500/50 font-bold transition">Gas</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pure Text Callout Banner (when type === 'text') -->
+            <div id="media-text-stage" class="w-full py-3 px-4 rounded-xl bg-slate-900/80 border border-cyan-500/30 text-center hidden">
+              <div class="text-sm md:text-base font-bold uppercase tracking-widest text-cyan-400 mb-1">
+                LABORATORY FIELD OBSERVATION NOTE
+              </div>
+              <p id="media-text-content" class="text-base md:text-lg text-slate-200 font-medium"></p>
+            </div>
+          </div>
+
+          <!-- 4 Answer Choice Panels (A, B, C, D) in a 2x2 Grid -->
+          <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 md:gap-4 mt-2" role="group" aria-label="Answer Choices">
+            <!-- Dynamically populated by renderQuestion() -->
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT FLANK: TEAM 2 SCOREKEEPER STATION ("Quantum Coils") -->
+    <aside id="team-2-station" class="lg:col-span-3 bg-slate-900/95 border-4 border-slate-700/80 rounded-3xl p-4 md:p-5 flex flex-col justify-between relative transition-all duration-300">
+      <!-- Active Turn Top Pill -->
+      <div class="flex items-center justify-between gap-2 mb-1">
+        <span class="px-3 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-widest bg-amber-950/90 text-amber-300 border border-amber-500/50">
+          STATION 02
+        </span>
+        <span id="team-2-turn-badge" class="px-3.5 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-wider bg-slate-800 text-slate-400">
+          STANDBY
+        </span>
+      </div>
+
+      <!-- Avatar Badge: Glowing Atomic Nucleus / Magnetic Coil -->
+      <div class="my-1.5 flex flex-col items-center">
+        <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl bg-slate-950/90 border-2 border-amber-400/80 shadow-[0_0_30px_rgba(245,158,11,0.3)] flex items-center justify-center relative overflow-hidden">
+          <svg viewBox="0 0 100 100" class="w-20 h-20 md:w-24 md:h-24">
+            <circle cx="50" cy="50" r="36" fill="rgba(245, 158, 11, 0.14)" />
+            <g class="orbit-spin">
+              <ellipse cx="50" cy="50" rx="38" ry="14" fill="none" stroke="#f59e0b" stroke-width="3" transform="rotate(35 50 50)" />
+              <circle cx="81" cy="71" r="4.5" fill="#fde68a" />
+            </g>
+            <g class="orbit-spin-reverse">
+              <ellipse cx="50" cy="50" rx="38" ry="14" fill="none" stroke="#f43f5e" stroke-width="3" transform="rotate(-35 50 50)" />
+              <circle cx="19" cy="71" r="4.5" fill="#fda4af" />
+            </g>
+            <ellipse cx="50" cy="50" rx="14" ry="38" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="5 3" />
+            <!-- Glowing Nucleus -->
+            <circle cx="47" cy="48" r="7" fill="#f59e0b" />
+            <circle cx="54" cy="48" r="6.5" fill="#f43f5e" />
+            <circle cx="50" cy="54" r="6.5" fill="#06b6d4" />
+            <circle cx="50" cy="50" r="4" fill="#ffffff" opacity="0.9" />
+          </svg>
+        </div>
+
+        <!-- Editable & Selectable Team Name -->
+        <div class="mt-2.5 w-full text-center">
+          <label for="team-2-name-input" class="sr-only">Team 2 Name</label>
+          <input
+            id="team-2-name-input"
+            type="text"
+            value="Quantum Coils"
+            maxlength="22"
+            aria-label="Team 2 Name"
+            class="w-full text-center bg-transparent hover:bg-slate-800/70 focus:bg-slate-950 text-2xl md:text-3xl font-black text-amber-300 font-chalk rounded-xl px-2 py-0.5 border border-transparent hover:border-amber-500/40 focus:border-amber-400 focus:outline-none transition"
+          />
+          <div class="mt-1 flex items-center justify-center gap-1.5">
+            <select
+              id="team-2-preset"
+              onchange="applyTeamPreset(2, this.value)"
+              aria-label="Select preset name for Team 2"
+              class="bg-slate-950 text-slate-300 text-xs font-bold px-2.5 py-1 rounded-lg border border-slate-700 hover:border-amber-400 focus:outline-none cursor-pointer"
+            >
+              <option value="Quantum Coils">Preset: Quantum Coils</option>
+              <option value="Neutron Knights">Preset: Neutron Knights</option>
+              <option value="Kinetic Cruisers">Preset: Kinetic Cruisers</option>
+              <option value="Photon Falcons">Preset: Photon Falcons</option>
+              <option value="Atomic Titans">Preset: Atomic Titans</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- HIGH-VISIBILITY DIGITAL SCOREKEEPER MODULE -->
+      <div class="my-2 bg-slate-950/95 border-2 border-amber-500/60 rounded-2xl p-3.5 text-center relative shadow-[inset_0_2px_18px_rgba(0,0,0,0.85)]">
+        <div class="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-slate-400 px-1 mb-0.5">
+          <span>TEAM 02 SCORE</span>
+          <button onclick="toggleDirectScoreEdit(2)" title="Directly Edit Team 2 Score" class="text-slate-500 hover:text-amber-300 transition flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+            <span class="text-[11px]">EDIT</span>
+          </button>
+        </div>
+
+        <!-- Extra-Large Tabular Monospace Score Readout -->
+        <div class="relative flex items-center justify-center py-1">
+          <div id="team-2-score" class="font-mono-digital text-6xl md:text-7xl xl:text-[5.25rem] leading-none font-black text-amber-400 tracking-tight drop-shadow-[0_0_22px_rgba(245,158,11,0.55)]">
+            000
+          </div>
+          <!-- Float-up "+100" / "+50" Particle Burst Container -->
+          <div id="team-2-delta" class="pointer-events-none absolute inset-x-0 -top-2 text-3xl md:text-4xl font-black text-amber-300 drop-shadow-[0_0_16px_rgba(245,158,11,0.9)] hidden">
+            +100
+          </div>
+          <div id="team-2-particles" class="pointer-events-none absolute inset-0 overflow-visible"></div>
+        </div>
+
+        <!-- Inline Direct Score Override Input (Hidden unless Teacher clicks Edit) -->
+        <div id="team-2-edit-row" class="hidden items-center justify-center gap-1.5 my-1.5">
+          <input id="team-2-direct-input" type="number" step="10" min="0" max="9999" class="w-24 bg-slate-900 border border-amber-400 rounded-lg px-2 py-1 text-center font-mono-digital text-lg font-black text-amber-200 focus:outline-none" />
+          <button onclick="applyDirectScoreEdit(2)" class="px-2.5 py-1 rounded-lg bg-amber-400 text-slate-950 font-black text-xs uppercase">SET</button>
+        </div>
+
+        <!-- Streak & Rounds Won Badges -->
+        <div class="mt-2 grid grid-cols-2 gap-2 bg-slate-900/90 border border-slate-800 rounded-xl p-2">
+          <div class="flex flex-col items-center border-r border-slate-800 pr-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">🔥 STREAK</span>
+            <strong id="team-2-streak" class="font-mono-digital text-lg md:text-xl font-black text-amber-300">0</strong>
+          </div>
+          <div class="flex flex-col items-center pl-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">🏆 ROUNDS WON</span>
+            <strong id="team-2-rounds" class="font-mono-digital text-lg md:text-xl font-black text-rose-300">0</strong>
+          </div>
+        </div>
+
+        <!-- Discreet Manual Teacher Override Controls (+/- pts) -->
+        <div class="mt-2.5 pt-2 border-t border-slate-800/90 flex items-center justify-between gap-1">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">TEACHER PTS:</span>
+          <div class="flex items-center gap-1">
+            <button onclick="adjustScore(2, -50)" title="Subtract 50 pts" class="px-2 py-1 rounded-md bg-slate-900 hover:bg-rose-950 text-slate-400 hover:text-rose-300 text-xs font-mono-digital font-bold border border-slate-800 hover:border-rose-500/50 transition">-50</button>
+            <button onclick="adjustScore(2, -10)" title="Subtract 10 pts" class="px-2 py-1 rounded-md bg-slate-900 hover:bg-rose-950 text-slate-400 hover:text-rose-300 text-xs font-mono-digital font-bold border border-slate-800 hover:border-rose-500/50 transition">-10</button>
+            <button onclick="adjustScore(2, 10)" title="Add +10 bonus pts (Great explanation!)" class="px-2 py-1 rounded-md bg-slate-900 hover:bg-emerald-950 text-slate-400 hover:text-emerald-300 text-xs font-mono-digital font-bold border border-slate-800 hover:border-emerald-500/50 transition">+10</button>
+            <button onclick="adjustScore(2, 50)" title="Add +50 pts" class="px-2 py-1 rounded-md bg-slate-900 hover:bg-emerald-950 text-slate-400 hover:text-emerald-300 text-xs font-mono-digital font-bold border border-slate-800 hover:border-emerald-500/50 transition">+50</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Station Footer Status -->
+      <div id="team-2-footer" class="text-center py-2 px-3 rounded-xl bg-slate-950/70 border border-slate-700 text-slate-400 font-bold text-sm md:text-base">
+        Awaiting Turn...
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- BOTTOM ACTION DOCK -->
+  <footer class="w-full max-w-[1800px] mx-auto mt-3">
+    <!-- Explanation Drawer (Pops up on Round Resolution) -->
+    <div id="explanation-drawer" class="hidden mb-3 rounded-2xl bg-slate-900/95 border-2 border-emerald-400/80 p-4 md:p-5 shadow-[0_0_40px_rgba(16,185,129,0.3)] backdrop-blur-md transition-all">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-start gap-3.5">
+          <div id="explanation-icon-box" class="w-12 h-12 rounded-xl bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center shrink-0 text-2xl font-black text-emerald-300">
+            ✓
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span id="explanation-headline" class="text-lg md:text-xl font-black uppercase tracking-wider text-emerald-300">
+                SCIENTIFIC EXPLANATION &amp; LAB EVIDENCE
+              </span>
+              <span id="explanation-points-pill" class="px-2.5 py-0.5 rounded-full text-xs md:text-sm font-black bg-emerald-500 text-slate-950">
+                +100 PTS AWARDED
+              </span>
+            </div>
+            <p id="explanation-text" class="mt-1 text-base md:text-xl text-slate-100 font-medium leading-relaxed">
+              Explanation details appear here.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Dock Bar -->
+    <div class="bg-slate-900/95 border-2 border-slate-700/90 rounded-2xl px-4 py-3 md:px-6 md:py-3.5 shadow-2xl flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Left / Center: Turn Status Message & Steal Banner -->
+      <div class="flex flex-wrap items-center gap-3 flex-1">
+        <div id="turn-status-indicator" class="w-4 h-4 rounded-full bg-cyan-400 shadow-[0_0_12px_#06b6d4]"></div>
+        <div id="turn-status-message" class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black tracking-wide text-white uppercase font-chalk">
+          TEAM 1'S TURN (CYBER BEAKERS) — CHOOSE AN ANSWER!
+        </div>
+
+        <!-- Steal Mode Alert Banner (Hidden until a wrong answer or timeout occurs) -->
+        <div id="steal-banner" class="hidden items-center gap-2 px-4 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-black text-base md:text-xl tracking-wide uppercase shadow-[0_0_25px_rgba(245,158,11,0.8)] animate-bounce">
+          <span>⚡</span>
+          <span id="steal-banner-text">INCORRECT! TEAM 2 CAN STEAL (+50 PTS)</span>
+        </div>
+      </div>
+
+      <!-- Right: Action Buttons (Toggle Explanation / Next Question) -->
+      <div class="flex items-center gap-3">
+        <button
+          id="toggle-explanation-btn"
+          onclick="toggleExplanationDrawer()"
+          class="hidden px-4 py-2.5 md:px-5 md:py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border-2 border-cyan-500/60 font-extrabold text-sm md:text-lg transition active:scale-95"
+        >
+          🔬 HIDE EXPLANATION
+        </button>
+
+        <button
+          id="next-question-btn"
+          onclick="handleNextQuestion()"
+          class="hidden items-center gap-2 px-6 py-2.5 md:px-8 md:py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-black text-base md:text-xl uppercase tracking-wider shadow-[0_0_30px_rgba(16,185,129,0.6)] transition transform hover:scale-105 active:scale-95"
+        >
+          <span id="next-question-btn-label">NEXT QUESTION</span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- VICTORY SUMMARY MODAL (Appears after completing all questions) -->
+  <div id="victory-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="max-w-2xl w-full bg-slate-900 border-4 border-cyan-400 rounded-3xl p-6 md:p-8 text-center shadow-[0_0_80px_rgba(6,182,212,0.45)] relative">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-amber-500/20 border-2 border-amber-400 text-5xl mb-4 shadow-[0_0_30px_rgba(245,158,11,0.5)]">
+        🏆
+      </div>
+      <h2 id="victory-title" class="font-chalk text-3xl md:text-5xl font-black text-white uppercase tracking-wide">
+        LAB CHALLENGE COMPLETE!
+      </h2>
+      <p id="victory-subtitle" class="mt-2 text-xl md:text-2xl font-bold text-amber-300">
+        CYBER BEAKERS CLAIM THE GOLDEN BEAKER!
+      </p>
+
+      <div class="grid grid-cols-2 gap-4 my-6">
+        <div class="bg-slate-950 border-2 border-cyan-500/60 rounded-2xl p-4">
+          <div id="victory-team1-name" class="text-lg md:text-xl font-black text-cyan-300 font-chalk">Cyber Beakers</div>
+          <div id="victory-team1-score" class="font-mono-digital text-4xl md:text-6xl font-black text-cyan-400 mt-1">000</div>
+          <div class="text-xs text-slate-400 font-bold uppercase mt-1">FINAL POINTS</div>
+        </div>
+        <div class="bg-slate-950 border-2 border-emerald-500/60 rounded-2xl p-4">
+          <div id="victory-team2-name" class="text-lg md:text-xl font-black text-emerald-300 font-chalk">Quantum Coils</div>
+          <div id="victory-team2-score" class="font-mono-digital text-4xl md:text-6xl font-black text-emerald-400 mt-1">000</div>
+          <div class="text-xs text-slate-400 font-bold uppercase mt-1">FINAL POINTS</div>
+        </div>
+      </div>
+
+      <button onclick="resetGame()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-400 to-emerald-400 hover:from-cyan-300 hover:to-emerald-300 text-slate-950 font-black text-xl md:text-2xl uppercase tracking-wider shadow-[0_0_30px_rgba(6,182,212,0.6)] transition transform hover:scale-105">
+        🔄 PLAY NEW LAB CHALLENGE
+      </button>
+    </div>
+  </div>
+
+  <!-- FULL-SCREEN CLASSROOM LIGHTBOX MODAL (Inspect / Enlarge Question Image) -->
+  <div
+    id="image-lightbox-modal"
+    onclick="closeImageLightbox()"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="lightbox-caption"
+    class="fixed inset-0 z-50 backdrop-blur-md bg-black/80 hidden flex-col items-center justify-center p-4 md:p-8 cursor-zoom-out select-none transition-opacity duration-200"
+  >
+    <!-- Top Right Close Button & Esc Hint -->
+    <div class="w-full max-w-[1650px] flex items-center justify-between gap-4 mb-3 px-2">
+      <div class="flex items-center gap-2.5">
+        <span class="px-3 py-1 rounded-lg bg-cyan-500/20 border border-cyan-400/60 text-cyan-300 font-mono-digital text-xs md:text-sm font-black uppercase tracking-wider">
+          🔬 HIGH-RESOLUTION LAB INSPECTION
+        </span>
+        <span id="lightbox-caption" class="text-sm md:text-lg font-bold text-slate-200 truncate max-w-xl md:max-w-3xl">
+          Laboratory Evidence View
+        </span>
+      </div>
+      <button
+        type="button"
+        id="close-lightbox-btn"
+        onclick="event.stopPropagation(); closeImageLightbox();"
+        aria-label="Close full-screen image inspection (Escape)"
+        class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/90 hover:bg-rose-600 text-slate-100 hover:text-white border-2 border-slate-600 hover:border-rose-400 font-extrabold text-sm md:text-base shadow-xl transition cursor-pointer"
+      >
+        <span>✕ CLOSE</span>
+        <span class="hidden sm:inline-block px-1.5 py-0.5 text-xs rounded bg-slate-800 text-slate-300 font-mono-digital border border-slate-700">ESC</span>
+      </button>
+    </div>
+
+    <!-- Maximum Clear Size Image Viewport -->
+    <div class="relative flex-1 w-full max-w-[1650px] flex items-center justify-center overflow-hidden">
+      <img
+        id="lightbox-image-el"
+        src=""
+        alt=""
+        class="max-w-[95vw] max-h-[82vh] w-auto h-auto object-contain rounded-2xl border-2 border-cyan-400/50 bg-slate-950/95 shadow-[0_0_70px_rgba(6,182,212,0.35)]"
+      />
+    </div>
+
+    <div class="mt-3 text-xs md:text-sm font-bold tracking-wider uppercase text-slate-400">
+      Click or tap anywhere — or press <span class="text-cyan-300 font-mono-digital">ESC</span> — to return to the question
+    </div>
+  </div>
+
+  <!-- APPLICATION SCRIPT: DECOUPLED QUESTION BANK + GAME ENGINE -->
+  <script>
+    // Self-contained high-resolution photorealistic laboratory SVG data URI (1600x900)
+    // Depicts a graduated cylinder meniscus, magnetic separation beaker with iron filings & sand, and digital lab scale
+    const LAB_HIGH_RES_SAMPLE_URI = "data:image/svg+xml;utf8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="1200" height="680">
+        <defs>
+          <radialGradient id="labBg" cx="50%" cy="40%" r="70%">
+            <stop offset="0%" stop-color="#1e293b"/>
+            <stop offset="65%" stop-color="#0f172a"/>
+            <stop offset="100%" stop-color="#050811"/>
+          </radialGradient>
+          <linearGradient id="benchGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#334155"/>
+            <stop offset="15%" stop-color="#1e293b"/>
+            <stop offset="100%" stop-color="#090d16"/>
+          </linearGradient>
+          <linearGradient id="glassBody" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.28)"/>
+            <stop offset="18%" stop-color="rgba(226,232,240,0.07)"/>
+            <stop offset="50%" stop-color="rgba(15,23,42,0.15)"/>
+            <stop offset="85%" stop-color="rgba(56,189,248,0.14)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0.32)"/>
+          </linearGradient>
+          <linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#eab308"/>
+            <stop offset="40%" stop-color="#ca8a04"/>
+            <stop offset="100%" stop-color="#854d0e"/>
+          </linearGradient>
+          <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(34,211,238,0.55)"/>
+            <stop offset="100%" stop-color="rgba(2,132,199,0.75)"/>
+          </linearGradient>
+          <linearGradient id="magnetRed" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#fb7185"/>
+            <stop offset="50%" stop-color="#e11d48"/>
+            <stop offset="100%" stop-color="#881337"/>
+          </linearGradient>
+          <linearGradient id="steelPole" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#f8fafc"/>
+            <stop offset="50%" stop-color="#94a3b8"/>
+            <stop offset="100%" stop-color="#cbd5e1"/>
+          </linearGradient>
+          <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+
+        <!-- Studio Lab Background & Grid -->
+        <rect width="1200" height="680" fill="url(#labBg)"/>
+        <g stroke="rgba(148,163,184,0.08)" stroke-width="1">
+          <line x1="0" y1="120" x2="1200" y2="120"/><line x1="0" y1="240" x2="1200" y2="240"/>
+          <line x1="0" y1="360" x2="1200" y2="360"/><line x1="0" y1="480" x2="1200" y2="480"/>
+          <line x1="200" y1="0" x2="200" y2="540"/><line x1="400" y1="0" x2="400" y2="540"/>
+          <line x1="600" y1="0" x2="600" y2="540"/><line x1="800" y1="0" x2="800" y2="540"/>
+          <line x1="1000" y1="0" x2="1000" y2="540"/>
+        </g>
+
+        <!-- Laboratory Bench Surface -->
+        <rect x="0" y="535" width="1200" height="145" fill="url(#benchGrad)"/>
+        <line x1="0" y1="535" x2="1200" y2="535" stroke="#475569" stroke-width="3"/>
+
+        <!-- LEFT: 100 mL Precision Graduated Cylinder (Control Reference) -->
+        <g transform="translate(150, 95)">
+          <ellipse cx="70" cy="442" rx="64" ry="12" fill="rgba(0,0,0,0.55)"/>
+          <path d="M22 435 L118 435 L106 420 L34 420 Z" fill="#64748b" stroke="#cbd5e1" stroke-width="2"/>
+          <rect x="36" y="30" width="68" height="392" rx="6" fill="url(#glassBody)" stroke="#e2e8f0" stroke-width="3"/>
+          <!-- Cyan Solution inside cylinder (70 mL mark) -->
+          <path d="M38 152 Q70 160 102 152 L102 418 L38 418 Z" fill="url(#waterGrad)"/>
+          <path d="M38 152 Q70 160 102 152 Q70 146 38 152 Z" fill="#a5f3fc" opacity="0.8"/>
+          <!-- High-Resolution Graduation Markings -->
+          <g stroke="#f8fafc" stroke-width="2" font-family="monospace" font-size="13" fill="#f8fafc" font-weight="bold">
+            <line x1="38" y1="70" x2="62" y2="70"/><text x="68" y="74" stroke="none">100mL</text>
+            <line x1="38" y1="105" x2="54" y2="105"/>
+            <line x1="38" y1="140" x2="62" y2="140"/><text x="68" y="144" stroke="none">80mL</text>
+            <line x1="38" y1="175" x2="54" y2="175"/>
+            <line x1="38" y1="210" x2="62" y2="210"/><text x="68" y="214" stroke="none">60mL</text>
+            <line x1="38" y1="245" x2="54" y2="245"/>
+            <line x1="38" y1="280" x2="62" y2="280"/><text x="68" y="284" stroke="none">40mL</text>
+            <line x1="38" y1="315" x2="54" y2="315"/>
+            <line x1="38" y1="350" x2="62" y2="350"/><text x="68" y="354" stroke="none">20mL</text>
+          </g>
+          <text x="70" y="472" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="16" font-weight="bold">100 mL CYLINDER</text>
+        </g>
+
+        <!-- CENTER: 500 mL Borosilicate Beaker with Dry Mixture (Sand, Pebbles, Iron Filings) -->
+        <g transform="translate(430, 155)">
+          <ellipse cx="195" cy="382" rx="175" ry="18" fill="rgba(0,0,0,0.65)"/>
+          <!-- Sand & Pebble Bed at bottom -->
+          <path d="M36 275 Q115 262 195 272 Q275 282 354 268 L354 358 C354 370 344 376 330 376 L60 376 C46 376 36 370 36 358 Z" fill="url(#sandGrad)"/>
+          <!-- Fine Sand Grain Texture -->
+          <g fill="#fef08a" opacity="0.65">
+            <circle cx="72" cy="310" r="2.5"/><circle cx="95" cy="340" r="2"/><circle cx="135" cy="295" r="2.5"/>
+            <circle cx="165" cy="350" r="2"/><circle cx="210" cy="318" r="2.5"/><circle cx="248" cy="342" r="2"/>
+            <circle cx="290" cy="300" r="2.5"/><circle cx="320" cy="335" r="2"/><circle cx="115" cy="325" r="3"/>
+          </g>
+          <!-- Smooth River Pebbles -->
+          <g stroke="#475569" stroke-width="2">
+            <ellipse cx="88" cy="342" rx="22" ry="13" fill="#94a3b8" transform="rotate(-12 88 342)"/>
+            <ellipse cx="155" cy="332" rx="26" ry="15" fill="#64748b" transform="rotate(8 155 332)"/>
+            <ellipse cx="235" cy="346" rx="20" ry="12" fill="#cbd5e1" transform="rotate(-6 235 346)"/>
+            <ellipse cx="305" cy="334" rx="25" ry="14" fill="#94a3b8" transform="rotate(14 305 334)"/>
+            <ellipse cx="192" cy="356" rx="18" ry="11" fill="#475569"/>
+          </g>
+
+          <!-- Remaining Iron Filings in Mixture & Rising in Magnetic Field Stream -->
+          <g fill="#1e293b" stroke="#e2e8f0" stroke-width="1.2">
+            <!-- Filings still on sand surface -->
+            <rect x="115" y="276" width="10" height="3.5" rx="1.5" transform="rotate(-25 115 276)"/>
+            <rect x="180" y="272" width="11" height="3.5" rx="1.5" transform="rotate(-65 180 272)"/>
+            <rect x="260" y="278" width="10" height="3.5" rx="1.5" transform="rotate(-40 260 278)"/>
+            <!-- Filings leaping upward along magnetic field lines -->
+            <rect x="195" y="232" width="12" height="4" rx="2" transform="rotate(-70 195 232)"/>
+            <rect x="218" y="210" width="13" height="4" rx="2" transform="rotate(-60 218 210)"/>
+            <rect x="242" y="195" width="12" height="4" rx="2" transform="rotate(-80 242 195)"/>
+            <rect x="208" y="175" width="13" height="4" rx="2" transform="rotate(-55 208 175)"/>
+            <rect x="255" y="168" width="12" height="4" rx="2" transform="rotate(-75 255 168)"/>
+            <!-- Dense cluster of dark metallic iron filings clinging to North & South poles -->
+            <circle cx="215" cy="135" r="7" fill="#334155"/><circle cx="224" cy="142" r="6" fill="#1e293b"/>
+            <circle cx="206" cy="141" r="6.5" fill="#0f172a"/><circle cx="216" cy="149" r="5.5" fill="#334155"/>
+            <circle cx="278" cy="136" r="7" fill="#334155"/><circle cx="286" cy="143" r="6" fill="#1e293b"/>
+            <circle cx="270" cy="144" r="6" fill="#0f172a"/><circle cx="279" cy="151" r="5.5" fill="#334155"/>
+          </g>
+
+          <!-- Glowing Cyan Magnetic Flux Lines -->
+          <g fill="none" stroke="#22d3ee" stroke-width="2" stroke-dasharray="6 4" opacity="0.8" filter="url(#neonGlow)">
+            <path d="M214 140 C190 210, 175 245, 180 275"/>
+            <path d="M216 140 C225 190, 265 190, 278 140"/>
+            <path d="M280 140 C295 205, 275 245, 262 276"/>
+          </g>
+
+          <!-- Horseshoe Alnico Lab Magnet Lowered Into Beaker -->
+          <g transform="translate(185, -35)">
+            <path d="M20 145 V65 C20 22, 105 22, 105 65 V145" fill="none" stroke="url(#magnetRed)" stroke-width="26" stroke-linecap="butt"/>
+            <!-- Steel North & South Pole Tips -->
+            <rect x="7" y="135" width="26" height="32" rx="3" fill="url(#steelPole)" stroke="#475569" stroke-width="2"/>
+            <rect x="92" y="135" width="26" height="32" rx="3" fill="url(#steelPole)" stroke="#475569" stroke-width="2"/>
+            <text x="20" y="122" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="900">N</text>
+            <text x="105" y="122" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="900">S</text>
+          </g>
+
+          <!-- Beaker Glass Outline & White Enamel Graduations -->
+          <path d="M22 20 L34 32 L34 358 C34 372 46 380 62 380 L328 380 C344 380 356 372 356 358 L356 20" fill="url(#glassBody)" stroke="#f1f5f9" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <ellipse cx="195" cy="20" rx="166" ry="10" fill="rgba(255,255,255,0.08)" stroke="#f1f5f9" stroke-width="4"/>
+          <g stroke="rgba(248,250,252,0.78)" stroke-width="2.5" font-family="monospace" font-size="15" fill="#f8fafc" font-weight="bold">
+            <line x1="65" y1="85" x2="105" y2="85"/><text x="115" y="90" stroke="none">400 mL</text>
+            <line x1="65" y1="155" x2="105" y2="155"/><text x="115" y="160" stroke="none">300 mL</text>
+            <line x1="65" y1="225" x2="105" y2="225"/><text x="115" y="230" stroke="none">200 mL</text>
+            <line x1="65" y1="295" x2="105" y2="295"/><text x="115" y="300" stroke="none">100 mL</text>
+          </g>
+
+          <!-- Callout Labels for Classroom Inspection -->
+          <g font-family="sans-serif" font-weight="bold" font-size="15">
+            <rect x="380" y="75" width="245" height="44" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+            <text x="502" y="102" text-anchor="middle" fill="#67e8f9">Iron Filings Attracted to Poles</text>
+            <line x1="380" y1="97" x2="295" y2="132" stroke="#22d3ee" stroke-width="2.5"/>
+
+            <rect x="380" y="285" width="245" height="44" rx="8" fill="#0f172a" stroke="#eab308" stroke-width="2"/>
+            <text x="502" y="312" text-anchor="middle" fill="#fde047">Non-Magnetic Sand &amp; Pebbles</text>
+            <line x1="380" y1="307" x2="325" y2="325" stroke="#eab308" stroke-width="2.5"/>
+          </g>
+
+          <text x="195" y="418" text-anchor="middle" fill="#38bdf8" font-family="sans-serif" font-size="18" font-weight="bold" letter-spacing="1">BEAKER A: MAGNETIC SEPARATION OF MIXTURE</text>
+        </g>
+      </svg>
+    `);
+
+    const QUESTION_BANK = [
+      {
+        id: "demo-01",
+        category: "States & Atomic Theory",
+        benchmark: "SC.5.P.8.1",
+        dok: 2,
+        type: "3d-canvas", // 'text' | 'svg' | '3d-canvas' | 'image'
+        visualPayload: "particles-solid", // triggers internal canvas particle simulation
+        question: "A student observes a sample of matter whose particles vibrate in fixed positions. What is true about this sample's shape and volume?",
+        options: [
+          { text: "Definite shape and definite volume", correct: true },
+          { text: "Definite shape, but variable volume", correct: false },
+          { text: "Variable shape, but definite volume", correct: false },
+          { text: "Variable shape and variable volume", correct: false }
+        ],
+        explanation: "Solids have particles packed tightly in fixed positions that only vibrate, giving them both a definite shape and a definite volume."
+      },
+      {
+        id: "demo-02",
+        category: "Separating Matter",
+        benchmark: "SC.5.P.8.3",
+        dok: 2,
+        type: "image",
+        imageSrc: LAB_HIGH_RES_SAMPLE_URI,
+        imageAlt: "High-resolution laboratory view of a horseshoe magnet attracting dark iron filings out of a 500 mL borosilicate beaker containing yellow sand and smooth pebbles alongside a 100 mL graduated cylinder.",
+        visualPayload: `<svg viewBox="0 0 200 120" class="w-64 h-40 mx-auto"><rect x="40" y="70" width="120" height="40" rx="4" fill="#334155" stroke="#94a3b8" stroke-width="2"/><circle cx="70" cy="90" r="4" fill="#cbd5e1"/><circle cx="90" cy="95" r="4" fill="#cbd5e1"/><path d="M120 40 L150 40 L150 60 L135 60 L135 50 L120 50 Z" fill="#ef4444"/><rect x="110" y="40" width="10" height="20" fill="#94a3b8"/></svg>`,
+        question: "A beaker contains a dry mixture of iron filings, sand, and small pebbles. Which physical property allows a magnet to separate the iron filings first?",
+        options: [
+          { text: "Magnetic attraction", correct: true },
+          { text: "Particle size", correct: false },
+          { text: "Solubility in liquid", correct: false },
+          { text: "Relative density", correct: false }
+        ],
+        explanation: "Iron is magnetic, while sand and pebbles are not. The magnet separates the iron based on magnetism without changing any substances."
+      },
+      {
+        id: "demo-03",
+        category: "States & Kinetic Energy",
+        benchmark: "SC.5.P.8.1",
+        dok: 2,
+        type: "3d-canvas",
+        visualPayload: "particles-gas",
+        question: "Inside a sealed glass cylinder, particles of matter move rapidly in all directions and bounce off the walls far apart from one another. How will this sample behave?",
+        options: [
+          { text: "It will expand to fill the entire shape and volume of the cylinder", correct: true },
+          { text: "It will settle at the bottom with a fixed volume and variable shape", correct: false },
+          { text: "It will keep its own rigid shape regardless of the cylinder", correct: false },
+          { text: "Its particles will lock into a crystal lattice at room temperature", correct: false }
+        ],
+        explanation: "Gas particles have high kinetic energy and very weak attraction between particles, so they spread out to take both the shape and total volume of their closed container."
+      },
+      {
+        id: "demo-04",
+        category: "Properties of Solutions",
+        benchmark: "SC.5.P.8.2",
+        dok: 3,
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 320 130" class="w-80 h-40 mx-auto">
+          <!-- Warm Beaker (Left) -->
+          <rect x="28" y="25" width="95" height="82" rx="8" fill="#0f172a" stroke="#f8fafc" stroke-width="2.5"/>
+          <rect x="31" y="48" width="89" height="56" rx="5" fill="rgba(244,63,94,0.28)"/>
+          <circle cx="55" cy="75" r="3.5" fill="#fda4af"/><circle cx="78" cy="65" r="3" fill="#fda4af"/><circle cx="95" cy="84" r="3.5" fill="#fda4af"/>
+          <text x="75" y="18" text-anchor="middle" fill="#fda4af" font-size="12" font-weight="bold">WARM (45°C)</text>
+          <text x="75" y="122" text-anchor="middle" fill="#e2e8f0" font-size="11">Small Stirred Crystals</text>
+          <!-- Cold Beaker (Right) -->
+          <rect x="195" y="25" width="95" height="82" rx="8" fill="#0f172a" stroke="#f8fafc" stroke-width="2.5"/>
+          <rect x="198" y="48" width="89" height="56" rx="5" fill="rgba(6,182,212,0.25)"/>
+          <rect x="228" y="84" width="28" height="16" rx="3" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+          <text x="242" y="18" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="bold">COLD (10°C)</text>
+          <text x="242" y="122" text-anchor="middle" fill="#e2e8f0" font-size="11">1 Large Sugar Cube</text>
+        </svg>`,
+        question: "Two lab teams test how fast 10 grams of sugar dissolves in 200 mL of water. Which combination of conditions will cause the sugar to dissolve the FASTEST?",
+        options: [
+          { text: "Crushing the sugar into fine crystals, stirring, and using warm water", correct: true },
+          { text: "Using a single solid sugar cube in cold water without stirring", correct: false },
+          { text: "Cooling the water with ice while leaving the sugar undisturbed", correct: false },
+          { text: "Using larger sugar cubes in room-temperature water with a lid", correct: false }
+        ],
+        explanation: "Increasing temperature (faster water particle motion), stirring (bringing fresh solvent into contact with solute), and smaller particle size (greater surface area) all speed up dissolving."
+      },
+      {
+        id: "demo-05",
+        category: "Physical vs. Chemical Changes",
+        benchmark: "SC.5.P.9.1",
+        dok: 3,
+        type: "text",
+        visualPayload: "Lab Observation Log: A student mixes clear vinegar with white baking soda in Beaker A (bubbles of gas rapidly form and the beaker cools). In Beaker B, the student heats solid ice until it melts into liquid water.",
+        question: "Based on the Lab Observation Log, which statement accurately compares what happened inside Beaker A and Beaker B?",
+        options: [
+          { text: "Beaker A formed a brand-new substance (chemical change), while Beaker B only changed state (physical change)", correct: true },
+          { text: "Both Beaker A and Beaker B underwent chemical changes because heat energy moved", correct: false },
+          { text: "Both Beaker A and Beaker B only underwent physical changes in state of matter", correct: false },
+          { text: "Beaker B formed a new gas substance, while Beaker A only separated a mixture", correct: false }
+        ],
+        explanation: "Fizzing gas bubbles upon mixing vinegar and baking soda indicate a chemical reaction producing carbon dioxide gas. Melting ice is a phase change where H₂O remains H₂O."
+      }
+    ];
+
+    // =========================================================================
+    // GAME STATE MACHINE
+    // =========================================================================
+    const STORAGE_KEY = "matter_lab_challenge_scorekeeper_v1";
+
+    const gameState = {
+      currentQuestionIndex: 0,
+      startingTeamForRound: 1, // Alternates 1 -> 2 -> 1 -> 2 each question
+      activeTeam: 1,           // Whose turn it is right now (changes during Steal Mode)
+      phase: "NORMAL_TURN",    // 'NORMAL_TURN' | 'STEAL_TURN' | 'RESOLVED'
+      scores: { 1: 0, 2: 0 },
+      displayedScores: { 1: 0, 2: 0 },
+      streaks: { 1: 0, 2: 0 },
+      roundsWon: { 1: 0, 2: 0 },
+      shuffledOptions: [],
+      soundEnabled: true,
+      timerDuration: 0,        // 0 = Off, 15 = 15s, 30 = 30s
+      timerRemaining: 0,
+      timerIntervalId: null,
+      lastTickSecond: null,
+      woodFrame: false,
+      resetScoresPending: false,
+      resetScoresTimeoutId: null
+    };
+
+    // =========================================================================
+    // WEB AUDIO API SYNTHESIZER (Zero External Dependencies)
+    // =========================================================================
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playSound(effect) {
+      if (!gameState.soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+
+      const now = ctx.currentTime;
+
+      if (effect === "correct") {
+        // Bright ascending lab chime (C5 -> E5 -> G5 -> C6)
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(freq, now + idx * 0.085);
+          gain.gain.setValueAtTime(0.001, now + idx * 0.085);
+          gain.gain.exponentialRampToValueAtTime(0.22, now + idx * 0.085 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.085 + 0.42);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.085);
+          osc.stop(now + idx * 0.085 + 0.45);
+        });
+      } else if (effect === "wrong") {
+        // Low laboratory error buzzer (dual sawtooth dissonant drop)
+        [155, 116.5].forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(freq, now + idx * 0.14);
+          osc.frequency.linearRampToValueAtTime(freq * 0.82, now + idx * 0.14 + 0.28);
+          gain.gain.setValueAtTime(0.18, now + idx * 0.14);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.14 + 0.32);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.14);
+          osc.stop(now + idx * 0.14 + 0.34);
+        });
+      } else if (effect === "tick") {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, now);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.07);
+      } else if (effect === "fanfare") {
+        // Victory brass-synth chord arpeggio
+        const seq = [
+          { f: 523.25, t: 0, d: 0.15 },
+          { f: 659.25, t: 0.14, d: 0.15 },
+          { f: 783.99, t: 0.28, d: 0.15 },
+          { f: 1046.5, t: 0.42, d: 0.55 },
+          { f: 783.99, t: 0.62, d: 0.15 },
+          { f: 1046.5, t: 0.78, d: 0.7 }
+        ];
+        seq.forEach(n => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(n.f, now + n.t);
+          gain.gain.setValueAtTime(0.22, now + n.t);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + n.t);
+          osc.stop(now + n.t + n.d + 0.02);
+        });
+      }
+    }
+
+    function toggleSound() {
+      gameState.soundEnabled = !gameState.soundEnabled;
+      const btn = document.getElementById("sound-toggle-btn");
+      const icon = document.getElementById("sound-icon");
+      const text = document.getElementById("sound-text");
+
+      if (gameState.soundEnabled) {
+        icon.textContent = "🔊";
+        text.textContent = "SOUND ON";
+        btn.className = "flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border-2 border-emerald-500/60 text-emerald-300 font-extrabold text-sm md:text-base transition shadow-md active:scale-95";
+        playSound("tick");
+      } else {
+        icon.textContent = "🔇";
+        text.textContent = "MUTED";
+        btn.className = "flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border-2 border-slate-700 text-slate-400 font-extrabold text-sm md:text-base transition shadow-md active:scale-95";
+      }
+    }
+
+    function toggleFrameTheme() {
+      gameState.woodFrame = !gameState.woodFrame;
+      const frame = document.getElementById("chalkboard-outer-frame");
+      const label = document.getElementById("frame-label");
+      if (gameState.woodFrame) {
+        frame.classList.add("wood-accent");
+        label.textContent = "Wood";
+      } else {
+        frame.classList.remove("wood-accent");
+        label.textContent = "Metal";
+      }
+    }
+
+    // =========================================================================
+    // FISHER-YATES SHUFFLE
+    // =========================================================================
+    function fisherYatesShuffle(array) {
+      const copy = array.map((item, idx) => ({ ...item, originalIndex: idx }));
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // =========================================================================
+    // INTERACTIVE 2D/3D PARTICLE PHYSICS SIMULATION (CANVAS)
+    // =========================================================================
+    const particleSim = {
+      mode: "particles-solid",
+      particles: [],
+      animFrameId: null,
+      running: false,
+      shockwave: { active: false, x: 0, y: 0, radius: 0 }
+    };
+
+    function initParticleSimulation(mode) {
+      particleSim.mode = mode || "particles-solid";
+      const canvas = document.getElementById("particle-canvas");
+      if (!canvas) return;
+      const w = canvas.width;
+      const h = canvas.height;
+      particleSim.particles = [];
+
+      // Update active simulator mode button highlights
+      ["solid", "liquid", "gas"].forEach(st => {
+        const btn = document.getElementById(`sim-btn-${st}`);
+        if (!btn) return;
+        if (particleSim.mode === `particles-${st}`) {
+          btn.className = "px-2.5 py-0.5 rounded bg-cyan-500 text-slate-950 font-black transition shadow";
+        } else {
+          btn.className = "px-2.5 py-0.5 rounded bg-slate-800 hover:bg-cyan-900 text-cyan-200 border border-cyan-500/50 font-bold transition";
+        }
+      });
+
+      const caption = document.getElementById("canvas-sim-caption");
+
+      if (particleSim.mode === "particles-solid") {
+        if (caption) caption.textContent = "Solid Lattice: Particles vibrate in fixed 3D positions (Click to pulse heat)";
+        const cols = 7;
+        const rows = 4;
+        const spacingX = 36;
+        const spacingY = 32;
+        const startX = (w - (cols - 1) * spacingX) / 2;
+        const startY = (h - (rows - 1) * spacingY) / 2 + 6;
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const zDepth = (r % 2 === 0 ? 0.92 : 1.08);
+            const homeX = startX + c * spacingX + (r % 2 === 0 ? -5 : 5);
+            const homeY = startY + r * spacingY;
+            particleSim.particles.push({
+              x: homeX,
+              y: homeY,
+              homeX,
+              homeY,
+              vx: 0,
+              vy: 0,
+              radius: 10.5 * zDepth,
+              z: zDepth,
+              phase: Math.random() * Math.PI * 2,
+              color: "#06b6d4"
+            });
+          }
+        }
+      } else if (particleSim.mode === "particles-liquid") {
+        if (caption) caption.textContent = "Liquid State: Particles stay close together but slide past one another";
+        const count = 32;
+        for (let i = 0; i < count; i++) {
+          const zDepth = 0.85 + Math.random() * 0.3;
+          particleSim.particles.push({
+            x: 110 + Math.random() * (w - 220),
+            y: h * 0.45 + Math.random() * (h * 0.45),
+            vx: (Math.random() - 0.5) * 2.2,
+            vy: (Math.random() - 0.5) * 1.4,
+            radius: 10 * zDepth,
+            z: zDepth,
+            phase: Math.random() * Math.PI * 2,
+            color: "#10b981"
+          });
+        }
+      } else {
+        // particles-gas
+        if (caption) caption.textContent = "Gas State: High-speed particles move freely and collide across the whole chamber";
+        const count = 18;
+        for (let i = 0; i < count; i++) {
+          const zDepth = 0.8 + Math.random() * 0.4;
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 3.6 + Math.random() * 2.6;
+          particleSim.particles.push({
+            x: 40 + Math.random() * (w - 80),
+            y: 30 + Math.random() * (h - 60),
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            radius: 9.5 * zDepth,
+            z: zDepth,
+            phase: Math.random() * Math.PI * 2,
+            color: "#f59e0b"
+          });
+        }
+      }
+
+      if (!particleSim.running) {
+        particleSim.running = true;
+        requestAnimationFrame(stepParticleSimulation);
+      }
+    }
+
+    function setCanvasOverride(mode) {
+      initParticleSimulation(mode);
+      playSound("tick");
+    }
+
+    function stepParticleSimulation(timestamp) {
+      if (!particleSim.running) return;
+      const canvas = document.getElementById("particle-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw subtle 3D containment chamber grid lines
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.14)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(18, 14, w - 36, h - 28);
+      ctx.beginPath();
+      ctx.moveTo(18, 14);
+      ctx.lineTo(36, 28);
+      ctx.moveTo(w - 18, 14);
+      ctx.lineTo(w - 36, 28);
+      ctx.moveTo(18, h - 14);
+      ctx.lineTo(36, h - 28);
+      ctx.moveTo(w - 18, h - 14);
+      ctx.lineTo(w - 36, h - 28);
+      ctx.strokeRect(36, 28, w - 72, h - 56);
+      ctx.stroke();
+
+      // Draw expanding thermal energy shockwave if user clicked
+      if (particleSim.shockwave.active) {
+        particleSim.shockwave.radius += 6;
+        ctx.beginPath();
+        ctx.arc(particleSim.shockwave.x, particleSim.shockwave.y, particleSim.shockwave.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(56, 189, 248, ${Math.max(0, 1 - particleSim.shockwave.radius / 180)})`;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        if (particleSim.shockwave.radius > 180) {
+          particleSim.shockwave.active = false;
+        }
+      }
+
+      const pts = particleSim.particles;
+
+      // Draw lattice bonds for solid state
+      if (particleSim.mode === "particles-solid") {
+        ctx.strokeStyle = "rgba(6, 182, 212, 0.28)";
+        ctx.lineWidth = 2;
+        for (let i = 0; i < pts.length; i++) {
+          for (let j = i + 1; j < pts.length; j++) {
+            const dx = pts[i].x - pts[j].x;
+            const dy = pts[i].y - pts[j].y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < 44) {
+              ctx.beginPath();
+              ctx.moveTo(pts[i].x, pts[i].y);
+              ctx.lineTo(pts[j].x, pts[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      // Update & render each 3D-shaded sphere particle
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i];
+
+        if (particleSim.mode === "particles-solid") {
+          const jitterX = Math.sin(timestamp * 0.022 + p.phase) * 2.4;
+          const jitterY = Math.cos(timestamp * 0.026 + p.phase * 1.3) * 2.4;
+          p.vx *= 0.88;
+          p.vy *= 0.88;
+          p.x = p.homeX + jitterX + p.vx;
+          p.y = p.homeY + jitterY + p.vy;
+        } else if (particleSim.mode === "particles-liquid") {
+          p.vy += 0.08; // Gentle gravity keeping liquid pooled in bottom half
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // Liquid pool bounds
+          const leftBound = 85;
+          const rightBound = w - 85;
+          const topSurface = h * 0.44;
+          const bottomBound = h - 24;
+
+          if (p.x < leftBound) { p.x = leftBound; p.vx = Math.abs(p.vx); }
+          if (p.x > rightBound) { p.x = rightBound; p.vx = -Math.abs(p.vx); }
+          if (p.y > bottomBound) { p.y = bottomBound; p.vy = -Math.abs(p.vy) * 0.75; }
+          if (p.y < topSurface) { p.vy += 0.18; }
+
+          // Gentle particle-to-particle jostling
+          for (let j = i + 1; j < pts.length; j++) {
+            const o = pts[j];
+            const dx = o.x - p.x;
+            const dy = o.y - p.y;
+            const dist = Math.hypot(dx, dy);
+            const minDist = (p.radius + o.radius) * 0.92;
+            if (dist > 0 && dist < minDist) {
+              const overlap = (minDist - dist) * 0.5;
+              const nx = dx / dist;
+              const ny = dy / dist;
+              p.x -= nx * overlap;
+              p.y -= ny * overlap;
+              o.x += nx * overlap;
+              o.y += ny * overlap;
+            }
+          }
+        } else {
+          // Gas state: high velocity elastic collisions across whole chamber
+          p.x += p.vx;
+          p.y += p.vy;
+          const pad = 26;
+          if (p.x < pad) { p.x = pad; p.vx = Math.abs(p.vx); }
+          if (p.x > w - pad) { p.x = w - pad; p.vx = -Math.abs(p.vx); }
+          if (p.y < pad) { p.y = pad; p.vy = Math.abs(p.vy); }
+          if (p.y > h - pad) { p.y = h - pad; p.vy = -Math.abs(p.vy); }
+        }
+
+        // Draw 3D specular sphere
+        const grad = ctx.createRadialGradient(
+          p.x - p.radius * 0.35,
+          p.y - p.radius * 0.35,
+          p.radius * 0.12,
+          p.x,
+          p.y,
+          p.radius
+        );
+        if (particleSim.mode === "particles-solid") {
+          grad.addColorStop(0, "#cffafe");
+          grad.addColorStop(0.45, "#06b6d4");
+          grad.addColorStop(1, "#0e7490");
+        } else if (particleSim.mode === "particles-liquid") {
+          grad.addColorStop(0, "#d1fae5");
+          grad.addColorStop(0.45, "#10b981");
+          grad.addColorStop(1, "#047857");
+        } else {
+          grad.addColorStop(0, "#fef3c7");
+          grad.addColorStop(0.45, "#f59e0b");
+          grad.addColorStop(1, "#b45309");
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.35)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      particleSim.animFrameId = requestAnimationFrame(stepParticleSimulation);
+    }
+
+    // Interactive click on particle canvas sends thermal impulse
+    document.addEventListener("DOMContentLoaded", () => {
+      const canvas = document.getElementById("particle-canvas");
+      if (canvas) {
+        canvas.addEventListener("click", (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+          const clickX = (e.clientX - rect.left) * scaleX;
+          const clickY = (e.clientY - rect.top) * scaleY;
+
+          particleSim.shockwave = { active: true, x: clickX, y: clickY, radius: 8 };
+          playSound("tick");
+
+          particleSim.particles.forEach(p => {
+            const dx = p.x - clickX;
+            const dy = p.y - clickY;
+            const dist = Math.max(20, Math.hypot(dx, dy));
+            const force = Math.min(12, 260 / dist);
+            p.vx += (dx / dist) * force;
+            p.vy += (dy / dist) * force;
+          });
+        });
+      }
+    });
+
+    // =========================================================================
+    // TIMER ENGINE (Off | 15s | 30s)
+    // =========================================================================
+    function setTimerMode(seconds) {
+      gameState.timerDuration = seconds;
+      [0, 15, 30].forEach(val => {
+        const btn = document.getElementById(`timer-btn-${val}`);
+        if (val === seconds) {
+          btn.className = "px-3 py-1.5 rounded-lg text-sm md:text-base font-extrabold transition bg-cyan-500 text-slate-950 shadow";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-lg text-sm md:text-base font-extrabold transition text-slate-300 hover:text-white hover:bg-slate-800";
+        }
+      });
+
+      const barWrapper = document.getElementById("timer-bar-wrapper");
+      const readout = document.getElementById("timer-digital-readout");
+
+      if (seconds === 0) {
+        stopQuestionTimer();
+        barWrapper.classList.add("hidden");
+        readout.classList.add("hidden");
+      } else {
+        barWrapper.classList.remove("hidden");
+        readout.classList.remove("hidden");
+        if (gameState.phase !== "RESOLVED") {
+          startQuestionTimer();
+        }
+      }
+    }
+
+    function startQuestionTimer() {
+      stopQuestionTimer();
+      if (gameState.timerDuration <= 0 || gameState.phase === "RESOLVED") return;
+
+      gameState.timerRemaining = gameState.timerDuration;
+      gameState.lastTickSecond = Math.ceil(gameState.timerRemaining);
+      updateTimerVisuals();
+
+      const startTime = performance.now();
+      const durationMs = gameState.timerDuration * 1000;
+
+      gameState.timerIntervalId = setInterval(() => {
+        const elapsed = performance.now() - startTime;
+        const remainingMs = Math.max(0, durationMs - elapsed);
+        gameState.timerRemaining = remainingMs / 1000;
+        updateTimerVisuals();
+
+        const currentWholeSec = Math.ceil(gameState.timerRemaining);
+        if (currentWholeSec <= 5 && currentWholeSec > 0 && currentWholeSec !== gameState.lastTickSecond) {
+          gameState.lastTickSecond = currentWholeSec;
+          playSound("tick");
+        }
+
+        if (remainingMs <= 0) {
+          stopQuestionTimer();
+          handleTimerExpired();
+        }
+      }, 50);
+    }
+
+    function stopQuestionTimer() {
+      if (gameState.timerIntervalId) {
+        clearInterval(gameState.timerIntervalId);
+        gameState.timerIntervalId = null;
+      }
+    }
+
+    function updateTimerVisuals() {
+      const fill = document.getElementById("timer-bar-fill");
+      const readout = document.getElementById("timer-digital-readout");
+      if (!fill || gameState.timerDuration <= 0) return;
+
+      const pct = Math.max(0, Math.min(100, (gameState.timerRemaining / gameState.timerDuration) * 100));
+      fill.style.width = `${pct}%`;
+      readout.textContent = `${Math.ceil(gameState.timerRemaining)}s`;
+
+      // Green -> Yellow -> Pulsing Red color shift
+      if (pct > 50) {
+        fill.className = "h-full bg-emerald-500 transition-all duration-75 rounded-full";
+        readout.className = "font-mono-digital text-lg md:text-xl font-black px-2.5 text-emerald-400";
+      } else if (pct > 25) {
+        fill.className = "h-full bg-amber-400 transition-all duration-75 rounded-full";
+        readout.className = "font-mono-digital text-lg md:text-xl font-black px-2.5 text-amber-400";
+      } else {
+        fill.className = "h-full bg-rose-500 transition-all duration-75 rounded-full timer-danger";
+        readout.className = "font-mono-digital text-lg md:text-xl font-black px-2.5 text-rose-400 animate-pulse";
+      }
+    }
+
+    function handleTimerExpired() {
+      playSound("wrong");
+      if (gameState.phase === "NORMAL_TURN") {
+        // Counts as incorrect for active team -> Immediately triggers Steal Mode for opposing team
+        gameState.streaks[gameState.activeTeam] = 0;
+        updateStreakBadges();
+
+        const opposingTeam = gameState.activeTeam === 1 ? 2 : 1;
+        gameState.phase = "STEAL_TURN";
+        gameState.activeTeam = opposingTeam;
+
+        updateTurnVisuals(true, "TIME EXPIRED!");
+        startQuestionTimer();
+      } else if (gameState.phase === "STEAL_TURN") {
+        // Steal timer ran out -> Reveal correct answer in gold/green, 0 pts
+        resolveRound(false, 0, "STEAL TIME EXPIRED! NO POINTS AWARDED");
+      }
+    }
+
+    // =========================================================================
+    // SCOREKEEPER PERSISTENCE (localStorage) & TEAM HELPERS
+    // =========================================================================
+    function getTeamName(teamNum) {
+      const input = document.getElementById(`team-${teamNum}-name-input`);
+      return (input && input.value.trim()) ? input.value.trim() : (teamNum === 1 ? "Cyber Beakers" : "Quantum Coils");
+    }
+
+    function saveScoreStateToStorage() {
+      try {
+        const payload = {
+          scores: gameState.scores,
+          streaks: gameState.streaks,
+          roundsWon: gameState.roundsWon,
+          team1Name: getTeamName(1),
+          team2Name: getTeamName(2),
+          updatedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      } catch (err) {
+        // Ignore storage quota or private mode issues gracefully
+      }
+    }
+
+    function loadScoreStateFromStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") return;
+
+        if (parsed.scores) {
+          const s1 = Math.max(0, parseInt(parsed.scores[1], 10) || 0);
+          const s2 = Math.max(0, parseInt(parsed.scores[2], 10) || 0);
+          gameState.scores[1] = s1;
+          gameState.scores[2] = s2;
+          gameState.displayedScores[1] = s1;
+          gameState.displayedScores[2] = s2;
+
+          const s1El = document.getElementById("team-1-score");
+          const s2El = document.getElementById("team-2-score");
+          if (s1El) s1El.textContent = String(s1).padStart(3, "0");
+          if (s2El) s2El.textContent = String(s2).padStart(3, "0");
+        }
+
+        if (parsed.streaks) {
+          gameState.streaks[1] = Math.max(0, parseInt(parsed.streaks[1], 10) || 0);
+          gameState.streaks[2] = Math.max(0, parseInt(parsed.streaks[2], 10) || 0);
+        }
+
+        if (parsed.roundsWon) {
+          gameState.roundsWon[1] = Math.max(0, parseInt(parsed.roundsWon[1], 10) || 0);
+          gameState.roundsWon[2] = Math.max(0, parseInt(parsed.roundsWon[2], 10) || 0);
+        }
+
+        const t1Input = document.getElementById("team-1-name-input");
+        const t2Input = document.getElementById("team-2-name-input");
+        if (t1Input && parsed.team1Name) t1Input.value = parsed.team1Name;
+        if (t2Input && parsed.team2Name) t2Input.value = parsed.team2Name;
+
+        updateStreakBadges();
+      } catch (err) {
+        // Ignore malformed localStorage gracefully
+      }
+    }
+
+    function applyTeamPreset(teamNum, presetName) {
+      const input = document.getElementById(`team-${teamNum}-name-input`);
+      if (input) {
+        input.value = presetName;
+        saveScoreStateToStorage();
+        updateTurnVisuals(gameState.phase === "STEAL_TURN");
+      }
+    }
+
+    // Float-up particle burst generator for +100 / +50 / bonus points
+    function spawnScoreParticles(teamNum, pointsAdded) {
+      const container = document.getElementById(`team-${teamNum}-particles`);
+      if (!container) return;
+      container.innerHTML = "";
+
+      const isPositive = pointsAdded > 0;
+      const palette = teamNum === 1
+        ? (isPositive ? ["#22d3ee", "#34d399", "#38bdf8", "#a7f3d0", "#facc15"] : ["#fb7185", "#f43f5e"])
+        : (isPositive ? ["#fbbf24", "#fb7185", "#34d399", "#fde047", "#f97316"] : ["#fb7185", "#f43f5e"]);
+
+      const count = isPositive ? 14 : 6;
+      for (let i = 0; i < count; i++) {
+        const spark = document.createElement("span");
+        spark.className = "score-spark-particle";
+        const size = 6 + Math.round(Math.random() * 7);
+        const startX = 28 + Math.random() * 44; // percentage across box
+        const dx = (Math.random() - 0.5) * 130;
+        const dy = -45 - Math.random() * 75;
+        const color = palette[i % palette.length];
+
+        spark.style.width = `${size}px`;
+        spark.style.height = `${size}px`;
+        spark.style.left = `${startX}%`;
+        spark.style.top = `52%`;
+        spark.style.background = color;
+        spark.style.boxShadow = `0 0 10px ${color}`;
+        spark.style.setProperty("--tx", `${dx}px`);
+        spark.style.setProperty("--ty", `${dy}px`);
+        spark.style.animationDelay = `${Math.random() * 0.12}s`;
+        container.appendChild(spark);
+      }
+
+      setTimeout(() => {
+        if (container) container.innerHTML = "";
+      }, 1500);
+    }
+
+    function animateScoreIncrement(teamNum, pointsAdded) {
+      gameState.scores[teamNum] = Math.max(0, gameState.scores[teamNum] + pointsAdded);
+      const target = gameState.scores[teamNum];
+      const start = gameState.displayedScores[teamNum];
+      const scoreEl = document.getElementById(`team-${teamNum}-score`);
+      const deltaEl = document.getElementById(`team-${teamNum}-delta`);
+
+      saveScoreStateToStorage();
+
+      if (pointsAdded !== 0 && deltaEl) {
+        const signLabel = pointsAdded > 0 ? `+${pointsAdded}` : `${pointsAdded}`;
+        deltaEl.textContent = signLabel;
+        const colorClass = pointsAdded >= 100
+          ? "text-emerald-300"
+          : (pointsAdded > 0 ? "text-amber-300" : "text-rose-400");
+        deltaEl.className = `pointer-events-none select-none absolute inset-x-0 top-1 z-20 text-3xl md:text-4xl font-black font-mono-digital ${colorClass} floating-delta`;
+        deltaEl.classList.remove("hidden");
+        spawnScoreParticles(teamNum, pointsAdded);
+        setTimeout(() => deltaEl.classList.add("hidden"), 1450);
+      }
+
+      if (scoreEl) {
+        scoreEl.classList.remove("score-pop");
+        void scoreEl.offsetWidth;
+        scoreEl.classList.add("score-pop");
+      }
+
+      const duration = 550;
+      const startTime = performance.now();
+
+      function tickScore(now) {
+        const progress = Math.min(1, (now - startTime) / duration);
+        const currentVal = Math.round(start + (target - start) * progress);
+        gameState.displayedScores[teamNum] = currentVal;
+        if (scoreEl) {
+          scoreEl.textContent = String(currentVal).padStart(3, "0");
+        }
+        if (progress < 1) {
+          requestAnimationFrame(tickScore);
+        }
+      }
+      requestAnimationFrame(tickScore);
+    }
+
+    function adjustScore(teamNum, delta) {
+      animateScoreIncrement(teamNum, delta);
+      playSound("tick");
+    }
+
+    function toggleDirectScoreEdit(teamNum) {
+      const row = document.getElementById(`team-${teamNum}-edit-row`);
+      const input = document.getElementById(`team-${teamNum}-direct-input`);
+      if (!row || !input) return;
+
+      if (row.classList.contains("hidden")) {
+        input.value = gameState.scores[teamNum];
+        row.classList.remove("hidden");
+        row.classList.add("flex");
+        input.focus();
+        input.select();
+      } else {
+        row.classList.add("hidden");
+        row.classList.remove("flex");
+      }
+    }
+
+    function applyDirectScoreEdit(teamNum) {
+      const row = document.getElementById(`team-${teamNum}-edit-row`);
+      const input = document.getElementById(`team-${teamNum}-direct-input`);
+      if (!input) return;
+
+      const parsed = parseInt(input.value, 10);
+      if (!Number.isNaN(parsed)) {
+        const clamped = Math.max(0, Math.min(9999, parsed));
+        const delta = clamped - gameState.scores[teamNum];
+        animateScoreIncrement(teamNum, delta);
+        playSound("tick");
+      }
+
+      if (row) {
+        row.classList.add("hidden");
+        row.classList.remove("flex");
+      }
+    }
+
+    function handleResetScoresClick() {
+      const btn = document.getElementById("reset-scores-btn");
+      const label = document.getElementById("reset-scores-label");
+      if (!btn || !label) return;
+
+      if (!gameState.resetScoresPending) {
+        gameState.resetScoresPending = true;
+        label.textContent = "CONFIRM RESET?";
+        btn.className = "flex items-center gap-1.5 bg-rose-600 hover:bg-rose-500 text-white border-2 border-amber-300 px-3 py-2 rounded-xl text-xs md:text-sm font-black transition shadow-[0_0_18px_rgba(244,63,94,0.65)] animate-pulse";
+        playSound("tick");
+
+        if (gameState.resetScoresTimeoutId) clearTimeout(gameState.resetScoresTimeoutId);
+        gameState.resetScoresTimeoutId = setTimeout(() => {
+          gameState.resetScoresPending = false;
+          label.textContent = "RESET SCORES";
+          btn.className = "flex items-center gap-1.5 bg-slate-800/90 hover:bg-amber-950/80 text-slate-200 hover:text-amber-200 border border-slate-700 hover:border-amber-500/60 px-3 py-2 rounded-xl text-xs md:text-sm font-extrabold transition shadow";
+        }, 3500);
+      } else {
+        if (gameState.resetScoresTimeoutId) clearTimeout(gameState.resetScoresTimeoutId);
+        gameState.resetScoresPending = false;
+        label.textContent = "SCORES CLEARED!";
+        btn.className = "flex items-center gap-1.5 bg-emerald-600 text-slate-950 border border-emerald-300 px-3 py-2 rounded-xl text-xs md:text-sm font-black transition shadow";
+
+        gameState.scores = { 1: 0, 2: 0 };
+        gameState.displayedScores = { 1: 0, 2: 0 };
+        gameState.streaks = { 1: 0, 2: 0 };
+        gameState.roundsWon = { 1: 0, 2: 0 };
+
+        const s1El = document.getElementById("team-1-score");
+        const s2El = document.getElementById("team-2-score");
+        if (s1El) s1El.textContent = "000";
+        if (s2El) s2El.textContent = "000";
+
+        updateStreakBadges();
+        saveScoreStateToStorage();
+        playSound("correct");
+
+        setTimeout(() => {
+          label.textContent = "RESET SCORES";
+          btn.className = "flex items-center gap-1.5 bg-slate-800/90 hover:bg-amber-950/80 text-slate-200 hover:text-amber-200 border border-slate-700 hover:border-amber-500/60 px-3 py-2 rounded-xl text-xs md:text-sm font-extrabold transition shadow";
+        }, 1400);
+      }
+    }
+
+    function updateStreakBadges() {
+      const s1 = document.getElementById("team-1-streak");
+      const s2 = document.getElementById("team-2-streak");
+      const r1 = document.getElementById("team-1-rounds");
+      const r2 = document.getElementById("team-2-rounds");
+      if (s1) s1.textContent = gameState.streaks[1];
+      if (s2) s2.textContent = gameState.streaks[2];
+      if (r1) r1.textContent = gameState.roundsWon[1];
+      if (r2) r2.textContent = gameState.roundsWon[2];
+    }
+
+    // =========================================================================
+    // TURN SEQUENCING & FLANK HALO VISUALS
+    // =========================================================================
+    function updateTurnVisuals(isSteal = false, prefixAlert = "INCORRECT!") {
+      const t1Station = document.getElementById("team-1-station");
+      const t2Station = document.getElementById("team-2-station");
+      const t1Badge = document.getElementById("team-1-turn-badge");
+      const t2Badge = document.getElementById("team-2-turn-badge");
+      const t1Footer = document.getElementById("team-1-footer");
+      const t2Footer = document.getElementById("team-2-footer");
+
+      const statusMsg = document.getElementById("turn-status-message");
+      const statusDot = document.getElementById("turn-status-indicator");
+      const stealBanner = document.getElementById("steal-banner");
+      const stealBannerText = document.getElementById("steal-banner-text");
+
+      const activeName = getTeamName(gameState.activeTeam).toUpperCase();
+
+      // Reset station classes
+      t1Station.classList.remove("team-1-active", "team-steal-active");
+      t2Station.classList.remove("team-2-active", "team-steal-active");
+
+      if (gameState.activeTeam === 1) {
+        t1Station.classList.add(isSteal ? "team-steal-active" : "team-1-active");
+        t1Station.style.borderColor = isSteal ? "#f59e0b" : "#06b6d4";
+        t2Station.style.borderColor = "rgba(51, 65, 85, 0.8)";
+
+        t1Badge.textContent = isSteal ? "⚡ STEAL CHANCE (+50)" : "● ACTIVE TURN";
+        t1Badge.className = isSteal
+          ? "px-3.5 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-wider bg-amber-400 text-slate-950 shadow-[0_0_15px_#f59e0b] animate-pulse"
+          : "px-3.5 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-wider bg-cyan-400 text-slate-950 shadow-[0_0_15px_#06b6d4] animate-pulse";
+
+        t2Badge.textContent = "STANDBY";
+        t2Badge.className = "px-3.5 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-wider bg-slate-800 text-slate-400";
+
+        t1Footer.textContent = isSteal ? "⚡ STEAL OPPORTUNITY (+50 PTS)!" : "🎯 Your Turn — Select A, B, C, or D!";
+        t1Footer.className = isSteal
+          ? "text-center py-2 px-3 rounded-xl bg-amber-500/20 border border-amber-400 text-amber-200 font-extrabold text-sm md:text-base"
+          : "text-center py-2 px-3 rounded-xl bg-cyan-950/80 border border-cyan-400/60 text-cyan-200 font-extrabold text-sm md:text-base";
+
+        t2Footer.textContent = "Standby at Lab Station 2";
+        t2Footer.className = "text-center py-2 px-3 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-400 font-bold text-sm md:text-base";
+
+        statusDot.className = isSteal
+          ? "w-4 h-4 rounded-full bg-amber-400 shadow-[0_0_12px_#f59e0b]"
+          : "w-4 h-4 rounded-full bg-cyan-400 shadow-[0_0_12px_#06b6d4]";
+      } else {
+        t2Station.classList.add(isSteal ? "team-steal-active" : "team-2-active");
+        t2Station.style.borderColor = isSteal ? "#fbbf24" : "#f59e0b";
+        t1Station.style.borderColor = "rgba(51, 65, 85, 0.8)";
+
+        t2Badge.textContent = isSteal ? "⚡ STEAL CHANCE (+50)" : "● ACTIVE TURN";
+        t2Badge.className = isSteal
+          ? "px-3.5 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-wider bg-amber-300 text-slate-950 shadow-[0_0_18px_#fbbf24] animate-pulse"
+          : "px-3.5 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 to-rose-500 text-slate-950 shadow-[0_0_16px_#f59e0b] animate-pulse";
+
+        t1Badge.textContent = "STANDBY";
+        t1Badge.className = "px-3.5 py-1 rounded-full text-xs md:text-sm font-black uppercase tracking-wider bg-slate-800 text-slate-400";
+
+        t2Footer.textContent = isSteal ? "⚡ STEAL OPPORTUNITY (+50 PTS)!" : "🎯 Your Turn — Select A, B, C, or D!";
+        t2Footer.className = isSteal
+          ? "text-center py-2 px-3 rounded-xl bg-amber-500/25 border border-amber-300 text-amber-100 font-extrabold text-sm md:text-base"
+          : "text-center py-2 px-3 rounded-xl bg-amber-950/80 border border-amber-400/60 text-amber-200 font-extrabold text-sm md:text-base";
+
+        t1Footer.textContent = "Standby at Lab Station 1";
+        t1Footer.className = "text-center py-2 px-3 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-400 font-bold text-sm md:text-base";
+
+        statusDot.className = isSteal
+          ? "w-4 h-4 rounded-full bg-amber-300 shadow-[0_0_14px_#fbbf24]"
+          : "w-4 h-4 rounded-full bg-amber-400 shadow-[0_0_12px_#f59e0b]";
+      }
+
+      if (isSteal) {
+        statusMsg.textContent = `TEAM ${gameState.activeTeam}'S STEAL (${activeName}) — PICK FROM REMAINING 3!`;
+        stealBannerText.textContent = `${prefixAlert} TEAM ${gameState.activeTeam} CAN STEAL (+50 PTS)`;
+        stealBanner.classList.remove("hidden");
+        stealBanner.classList.add("inline-flex");
+      } else {
+        statusMsg.textContent = `TEAM ${gameState.activeTeam}'S TURN (${activeName}) — CHOOSE AN ANSWER`;
+        stealBanner.classList.add("hidden");
+        stealBanner.classList.remove("inline-flex");
+      }
+    }
+
+    // =========================================================================
+    // QUESTION RENDERER & OPTION SELECTION LOGIC
+    // =========================================================================
+    function renderQuestionDots() {
+      const container = document.getElementById("question-dots");
+      if (!container) return;
+      container.innerHTML = "";
+      QUESTION_BANK.forEach((q, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.title = `Jump to Question ${idx + 1}: ${q.category}`;
+        btn.textContent = idx + 1;
+        btn.onclick = () => jumpToQuestion(idx);
+        if (idx === gameState.currentQuestionIndex) {
+          btn.className = "w-7 h-7 rounded-lg font-mono-digital text-xs font-black bg-cyan-400 text-slate-950 shadow";
+        } else {
+          btn.className = "w-7 h-7 rounded-lg font-mono-digital text-xs font-bold bg-slate-800 text-slate-400 hover:text-white border border-slate-700";
+        }
+        container.appendChild(btn);
+      });
+    }
+
+    function jumpToQuestion(index) {
+      gameState.currentQuestionIndex = index;
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      stopQuestionTimer();
+      const q = QUESTION_BANK[gameState.currentQuestionIndex];
+      if (!q) return;
+
+      gameState.phase = "NORMAL_TURN";
+      gameState.activeTeam = gameState.startingTeamForRound;
+
+      // Update Header Metadata
+      document.getElementById("header-category").textContent = q.category;
+      document.getElementById("header-benchmark").textContent = q.benchmark;
+      document.getElementById("header-dok").textContent = `DOK ${q.dok}`;
+      document.getElementById("question-counter-pill").textContent =
+        `QUESTION ${gameState.currentQuestionIndex + 1} OF ${QUESTION_BANK.length}`;
+
+      renderQuestionDots();
+
+      // Set Prompt
+      document.getElementById("question-prompt").textContent = q.question;
+
+      // Ensure lightbox is closed when loading a new question
+      closeImageLightbox();
+
+      // Configure Media Display Area ('text' | 'svg' | '3d-canvas' | 'image')
+      const imageStage = document.getElementById("media-image-stage");
+      const questionImageEl = document.getElementById("question-image-el");
+      const svgStage = document.getElementById("media-svg-stage");
+      const canvasStage = document.getElementById("media-canvas-stage");
+      const textStage = document.getElementById("media-text-stage");
+      const mediaBadge = document.getElementById("media-type-badge");
+
+      if (imageStage) imageStage.classList.add("hidden");
+      svgStage.classList.add("hidden");
+      canvasStage.classList.add("hidden");
+      textStage.classList.add("hidden");
+
+      if (q.type === "image" && (q.imageSrc || q.visualPayload)) {
+        mediaBadge.textContent = "HIGH-RES LAB IMAGERY";
+        particleSim.running = false;
+        const resolvedSrc = q.imageSrc || q.visualPayload;
+        const resolvedAlt = q.imageAlt || `${q.category} (${q.benchmark}) — Laboratory Visual Evidence`;
+        if (questionImageEl) {
+          questionImageEl.src = resolvedSrc;
+          questionImageEl.alt = resolvedAlt;
+        }
+        if (imageStage) imageStage.classList.remove("hidden");
+      } else if (q.type === "3d-canvas") {
+        mediaBadge.textContent = "3D PARTICLE SIMULATOR";
+        canvasStage.classList.remove("hidden");
+        initParticleSimulation(q.visualPayload || "particles-solid");
+      } else if (q.type === "svg") {
+        mediaBadge.textContent = "LAB APPARATUS DIAGRAM";
+        particleSim.running = false;
+        svgStage.innerHTML = q.visualPayload || "";
+        svgStage.classList.remove("hidden");
+      } else {
+        mediaBadge.textContent = "FIELD OBSERVATION LOG";
+        particleSim.running = false;
+        document.getElementById("media-text-content").textContent =
+          q.visualPayload || "Analyze the scientific inquiry prompt above carefully and choose the best evidence-based conclusion.";
+        textStage.classList.remove("hidden");
+      }
+
+      // Fisher-Yates Shuffle Answer Options
+      gameState.shuffledOptions = fisherYatesShuffle(q.options);
+
+      // Render 4 Answer Choice Panels (A, B, C, D)
+      const grid = document.getElementById("options-grid");
+      grid.innerHTML = "";
+      const letters = ["A", "B", "C", "D"];
+
+      gameState.shuffledOptions.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.id = `option-btn-${idx}`;
+        btn.className = "option-card rounded-2xl p-4 md:p-5 text-left flex items-center gap-4 group cursor-pointer";
+        btn.onclick = () => handleOptionSelect(idx);
+
+        btn.innerHTML = `
+          <span id="option-badge-${idx}" class="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-slate-950 border-2 border-cyan-400/70 group-hover:border-cyan-300 group-hover:bg-cyan-950 flex items-center justify-center font-mono-digital text-2xl md:text-3xl font-black text-cyan-300 shrink-0 shadow-md transition">
+            ${letters[idx]}
+          </span>
+          <span class="text-lg sm:text-xl md:text-2xl font-bold text-slate-100 leading-snug flex-1">
+            ${opt.text}
+          </span>
+        `;
+        grid.appendChild(btn);
+      });
+
+      // Reset Dock & Explanation Drawer
+      document.getElementById("explanation-drawer").classList.add("hidden");
+      document.getElementById("toggle-explanation-btn").classList.add("hidden");
+      document.getElementById("next-question-btn").classList.add("hidden");
+      document.getElementById("next-question-btn").classList.remove("inline-flex");
+
+      updateTurnVisuals(false);
+      startQuestionTimer();
+    }
+
+    function handleOptionSelect(selectedIndex) {
+      if (gameState.phase === "RESOLVED") return;
+
+      const selectedOpt = gameState.shuffledOptions[selectedIndex];
+      const btn = document.getElementById(`option-btn-${selectedIndex}`);
+      const badge = document.getElementById(`option-badge-${selectedIndex}`);
+      if (!btn || btn.disabled) return;
+
+      stopQuestionTimer();
+
+      if (gameState.phase === "NORMAL_TURN") {
+        if (selectedOpt.correct) {
+          // Correct on First Try (+100 pts)
+          btn.classList.add("option-correct");
+          badge.textContent = "✓";
+          badge.className = "w-12 h-12 md:w-14 md:h-14 rounded-xl bg-emerald-400 text-slate-950 flex items-center justify-center font-mono-digital text-2xl md:text-3xl font-black shrink-0 shadow-lg";
+
+          playSound("correct");
+          gameState.streaks[gameState.activeTeam] += 1;
+          gameState.roundsWon[gameState.activeTeam] += 1;
+          updateStreakBadges();
+          animateScoreIncrement(gameState.activeTeam, 100);
+
+          const winnerName = getTeamName(gameState.activeTeam).toUpperCase();
+          resolveRound(true, 100, `CORRECT! ${winnerName} EARN +100 POINTS!`);
+        } else {
+          // Incorrect on First Try -> Trigger STEAL MODE for opposing team
+          btn.disabled = true;
+          btn.classList.add("option-wrong", "animate-shake", "cursor-not-allowed");
+          badge.textContent = "✗";
+          badge.className = "w-12 h-12 md:w-14 md:h-14 rounded-xl bg-rose-500 text-white flex items-center justify-center font-mono-digital text-2xl md:text-3xl font-black shrink-0";
+
+          playSound("wrong");
+          gameState.streaks[gameState.activeTeam] = 0;
+          updateStreakBadges();
+          saveScoreStateToStorage();
+
+          const opposingTeam = gameState.activeTeam === 1 ? 2 : 1;
+          gameState.phase = "STEAL_TURN";
+          gameState.activeTeam = opposingTeam;
+
+          updateTurnVisuals(true, "INCORRECT!");
+          startQuestionTimer();
+        }
+      } else if (gameState.phase === "STEAL_TURN") {
+        if (selectedOpt.correct) {
+          // Steal Successful (+50 pts)
+          btn.classList.add("option-correct");
+          badge.textContent = "✓";
+          badge.className = "w-12 h-12 md:w-14 md:h-14 rounded-xl bg-emerald-400 text-slate-950 flex items-center justify-center font-mono-digital text-2xl md:text-3xl font-black shrink-0 shadow-lg";
+
+          playSound("correct");
+          gameState.streaks[gameState.activeTeam] += 1;
+          gameState.roundsWon[gameState.activeTeam] += 1;
+          updateStreakBadges();
+          animateScoreIncrement(gameState.activeTeam, 50);
+
+          const stealerName = getTeamName(gameState.activeTeam).toUpperCase();
+          resolveRound(true, 50, `STEAL SUCCESSFUL! ${stealerName} EARN +50 PTS!`);
+        } else {
+          // Steal Incorrect -> Flash red, reveal correct answer in gold/green, 0 bonus points
+          btn.disabled = true;
+          btn.classList.add("option-wrong", "animate-shake", "cursor-not-allowed");
+          badge.textContent = "✗";
+          badge.className = "w-12 h-12 md:w-14 md:h-14 rounded-xl bg-rose-500 text-white flex items-center justify-center font-mono-digital text-2xl md:text-3xl font-black shrink-0";
+
+          playSound("wrong");
+          gameState.streaks[gameState.activeTeam] = 0;
+          updateStreakBadges();
+          saveScoreStateToStorage();
+
+          resolveRound(false, 0, "STEAL UNSUCCESSFUL — CORRECT ANSWER REVEALED (0 PTS)");
+        }
+      }
+    }
+
+    function resolveRound(wasCorrect, pointsAwarded, bannerStatusText) {
+      gameState.phase = "RESOLVED";
+      stopQuestionTimer();
+
+      // Hide steal banner
+      const stealBanner = document.getElementById("steal-banner");
+      stealBanner.classList.add("hidden");
+      stealBanner.classList.remove("inline-flex");
+
+      // Disable all options and highlight the correct one if nobody got it
+      gameState.shuffledOptions.forEach((opt, idx) => {
+        const btn = document.getElementById(`option-btn-${idx}`);
+        const badge = document.getElementById(`option-badge-${idx}`);
+        if (!btn) return;
+        btn.disabled = true;
+        btn.classList.add("cursor-default");
+
+        if (opt.correct && !wasCorrect) {
+          btn.classList.add("option-revealed-gold");
+          badge.textContent = "★";
+          badge.className = "w-12 h-12 md:w-14 md:h-14 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-mono-digital text-2xl md:text-3xl font-black shrink-0 shadow-lg";
+        }
+      });
+
+      // Update Bottom Turn Status Message
+      document.getElementById("turn-status-message").textContent = bannerStatusText;
+
+      // Populate & Show Explanation Drawer
+      const q = QUESTION_BANK[gameState.currentQuestionIndex];
+      const drawer = document.getElementById("explanation-drawer");
+      const pointsPill = document.getElementById("explanation-points-pill");
+      const iconBox = document.getElementById("explanation-icon-box");
+
+      document.getElementById("explanation-text").textContent = q.explanation;
+
+      if (wasCorrect) {
+        pointsPill.textContent = `+${pointsAwarded} PTS AWARDED TO ${getTeamName(gameState.activeTeam).toUpperCase()}`;
+        pointsPill.className = "px-3 py-0.5 rounded-full text-xs md:text-sm font-black bg-emerald-400 text-slate-950";
+        iconBox.textContent = "✓";
+        iconBox.className = "w-12 h-12 rounded-xl bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center shrink-0 text-2xl font-black text-emerald-300";
+      } else {
+        pointsPill.textContent = "0 PTS AWARDED — REVIEW LAB EXPLANATION";
+        pointsPill.className = "px-3 py-0.5 rounded-full text-xs md:text-sm font-black bg-amber-400 text-slate-950";
+        iconBox.textContent = "💡";
+        iconBox.className = "w-12 h-12 rounded-xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center shrink-0 text-2xl font-black text-amber-300";
+      }
+
+      drawer.classList.remove("hidden");
+
+      // Show Toggle Explanation & Next Question buttons
+      const toggleBtn = document.getElementById("toggle-explanation-btn");
+      toggleBtn.textContent = "🔬 HIDE EXPLANATION";
+      toggleBtn.classList.remove("hidden");
+
+      const nextBtn = document.getElementById("next-question-btn");
+      const nextLabel = document.getElementById("next-question-btn-label");
+      if (gameState.currentQuestionIndex < QUESTION_BANK.length - 1) {
+        nextLabel.textContent = "NEXT QUESTION";
+      } else {
+        nextLabel.textContent = "FINISH & VIEW RESULTS";
+      }
+      nextBtn.classList.remove("hidden");
+      nextBtn.classList.add("inline-flex");
+    }
+
+    function toggleExplanationDrawer() {
+      const drawer = document.getElementById("explanation-drawer");
+      const btn = document.getElementById("toggle-explanation-btn");
+      if (drawer.classList.contains("hidden")) {
+        drawer.classList.remove("hidden");
+        btn.textContent = "🔬 HIDE EXPLANATION";
+      } else {
+        drawer.classList.add("hidden");
+        btn.textContent = "🔬 REVEAL EXPLANATION";
+      }
+    }
+
+    function handleNextQuestion() {
+      if (gameState.currentQuestionIndex < QUESTION_BANK.length - 1) {
+        gameState.currentQuestionIndex += 1;
+        // Alternate starting team each round automatically
+        gameState.startingTeamForRound = gameState.startingTeamForRound === 1 ? 2 : 1;
+        loadQuestion();
+      } else {
+        showVictoryModal();
+      }
+    }
+
+    function showVictoryModal() {
+      stopQuestionTimer();
+      playSound("fanfare");
+
+      const modal = document.getElementById("victory-modal");
+      const subtitle = document.getElementById("victory-subtitle");
+      const t1Name = getTeamName(1);
+      const t2Name = getTeamName(2);
+      const s1 = gameState.scores[1];
+      const s2 = gameState.scores[2];
+
+      document.getElementById("victory-team1-name").textContent = t1Name;
+      document.getElementById("victory-team2-name").textContent = t2Name;
+      document.getElementById("victory-team1-score").textContent = String(s1).padStart(3, "0");
+      document.getElementById("victory-team2-score").textContent = String(s2).padStart(3, "0");
+
+      if (s1 > s2) {
+        subtitle.textContent = `🎉 ${t1Name.toUpperCase()} WIN THE MATTER LAB CHAMPIONSHIP!`;
+      } else if (s2 > s1) {
+        subtitle.textContent = `🎉 ${t2Name.toUpperCase()} WIN THE MATTER LAB CHAMPIONSHIP!`;
+      } else {
+        subtitle.textContent = `⚡ SCIENTIFIC TIE! BOTH LAB TEAMS SHARE THE CHAMPIONSHIP!`;
+      }
+
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function resetGame() {
+      stopQuestionTimer();
+      const modal = document.getElementById("victory-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+
+      gameState.currentQuestionIndex = 0;
+      gameState.startingTeamForRound = 1;
+      gameState.activeTeam = 1;
+      gameState.phase = "NORMAL_TURN";
+      gameState.scores = { 1: 0, 2: 0 };
+      gameState.displayedScores = { 1: 0, 2: 0 };
+      gameState.streaks = { 1: 0, 2: 0 };
+      gameState.roundsWon = { 1: 0, 2: 0 };
+
+      document.getElementById("team-1-score").textContent = "000";
+      document.getElementById("team-2-score").textContent = "000";
+      updateStreakBadges();
+      saveScoreStateToStorage();
+      loadQuestion();
+    }
+
+    // =========================================================================
+    // FULL-SCREEN CLASSROOM LIGHTBOX MODAL CONTROLS
+    // =========================================================================
+    function openImageLightbox() {
+      const q = QUESTION_BANK[gameState.currentQuestionIndex];
+      const questionImageEl = document.getElementById("question-image-el");
+      const lightboxModal = document.getElementById("image-lightbox-modal");
+      const lightboxImg = document.getElementById("lightbox-image-el");
+      const lightboxCaption = document.getElementById("lightbox-caption");
+
+      if (!lightboxModal || !lightboxImg) return;
+
+      const src = (questionImageEl && questionImageEl.getAttribute("src")) || (q && (q.imageSrc || q.visualPayload)) || "";
+      if (!src) return;
+
+      const alt = (questionImageEl && questionImageEl.getAttribute("alt")) || (q && q.imageAlt) || "Laboratory Evidence View";
+      lightboxImg.src = src;
+      lightboxImg.alt = alt;
+      if (lightboxCaption) {
+        lightboxCaption.textContent = alt;
+      }
+
+      lightboxModal.classList.remove("hidden");
+      lightboxModal.classList.add("flex");
+      playSound("tick");
+    }
+
+    function closeImageLightbox() {
+      const lightboxModal = document.getElementById("image-lightbox-modal");
+      if (!lightboxModal || lightboxModal.classList.contains("hidden")) return;
+      lightboxModal.classList.add("hidden");
+      lightboxModal.classList.remove("flex");
+    }
+
+    // Update turn banner and save to localStorage dynamically if team names are edited
+    document.getElementById("team-1-name-input").addEventListener("input", () => {
+      saveScoreStateToStorage();
+      if (gameState.phase !== "RESOLVED") updateTurnVisuals(gameState.phase === "STEAL_TURN");
+    });
+    document.getElementById("team-2-name-input").addEventListener("input", () => {
+      saveScoreStateToStorage();
+      if (gameState.phase !== "RESOLVED") updateTurnVisuals(gameState.phase === "STEAL_TURN");
+    });
+
+    // Support pressing Enter inside direct score override inputs
+    ["1", "2"].forEach((teamNum) => {
+      const directInput = document.getElementById(`team-${teamNum}-direct-input`);
+      if (directInput) {
+        directInput.addEventListener("keydown", (ev) => {
+          if (ev.key === "Enter") {
+            ev.preventDefault();
+            applyDirectScoreEdit(Number(teamNum));
+          } else if (ev.key === "Escape") {
+            ev.preventDefault();
+            toggleDirectScoreEdit(Number(teamNum));
+          }
+        });
+      }
+    });
+
+    // Keyboard shortcuts (Escape for Lightbox, A/B/C/D or 1/2/3/4, Space/Enter for Next Question)
+    document.addEventListener("keydown", (e) => {
+      const lightboxModal = document.getElementById("image-lightbox-modal");
+      if (e.key === "Escape" && lightboxModal && !lightboxModal.classList.contains("hidden")) {
+        e.preventDefault();
+        closeImageLightbox();
+        return;
+      }
+
+      if (document.activeElement && document.activeElement.tagName === "INPUT") return;
+      if (lightboxModal && !lightboxModal.classList.contains("hidden")) return;
+
+      const key = e.key.toUpperCase();
+      if (["A", "1"].includes(key)) handleOptionSelect(0);
+      else if (["B", "2"].includes(key)) handleOptionSelect(1);
+      else if (["C", "3"].includes(key)) handleOptionSelect(2);
+      else if (["D", "4"].includes(key)) handleOptionSelect(3);
+      else if ((e.key === "Enter" || e.key === " ") && gameState.phase === "RESOLVED") {
+        e.preventDefault();
+        handleNextQuestion();
+      }
+    });
+
+    // Initialize game on load (restoring scorekeeper state from localStorage)
+    window.addEventListener("DOMContentLoaded", () => {
+      loadScoreStateFromStorage();
+      loadQuestion();
+    });
+  </script>
+</body>
+</html>
