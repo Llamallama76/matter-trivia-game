@@ -480,12 +480,12 @@
 
           <!-- Top Question Meta Bar inside Slate Board -->
           <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b-2 border-slate-700/80">
-            <div class="flex items-center gap-3">
-              <span id="question-counter-pill" class="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 border-2 border-cyan-400 text-cyan-200 font-mono-digital font-black text-base md:text-lg lg:text-xl">
-                QUESTION 1 OF 5
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span id="question-counter-pill" class="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 border-2 border-cyan-400 text-cyan-200 font-mono-digital font-black text-base md:text-lg lg:text-xl shrink-0">
+                QUESTION 1 OF 15
               </span>
               <!-- Quick question jump pills for teacher control -->
-              <div id="question-dots" class="hidden sm:flex items-center gap-1.5"></div>
+              <div id="question-dots" class="hidden sm:flex flex-wrap items-center gap-1"></div>
             </div>
             <div id="media-type-badge" class="px-3 py-1 rounded-lg bg-slate-800/90 border border-slate-600 text-slate-300 text-xs md:text-sm font-bold uppercase tracking-wider">
               3D PARTICLE SIMULATOR
@@ -1005,103 +1005,247 @@
       </svg>
     `);
 
-    const QUESTION_BANK = [
+    const DOK1_QUESTIONS = [
       {
-        id: "demo-01",
+        id: "MAT-DOK1-01",
+        benchmark: "SC.5.P.8.1",
+        dok: 1,
         category: "States & Atomic Theory",
-        benchmark: "SC.5.P.8.1",
-        dok: 2,
-        type: "3d-canvas", // 'text' | 'svg' | '3d-canvas' | 'image'
-        visualPayload: "particles-solid", // triggers internal canvas particle simulation
-        question: "A student observes a sample of matter whose particles vibrate in fixed positions. What is true about this sample's shape and volume?",
-        options: [
-          { text: "Definite shape and definite volume", correct: true },
-          { text: "Definite shape, but variable volume", correct: false },
-          { text: "Variable shape, but definite volume", correct: false },
-          { text: "Variable shape and variable volume", correct: false }
-        ],
-        explanation: "Solids have particles packed tightly in fixed positions that only vibrate, giving them both a definite shape and a definite volume."
-      },
-      {
-        id: "demo-02",
-        category: "Separating Matter",
-        benchmark: "SC.5.P.8.3",
-        dok: 2,
-        type: "image",
-        imageSrc: LAB_HIGH_RES_SAMPLE_URI,
-        imageAlt: "High-resolution laboratory view of a horseshoe magnet attracting dark iron filings out of a 500 mL borosilicate beaker containing yellow sand and smooth pebbles alongside a 100 mL graduated cylinder.",
-        visualPayload: `<svg viewBox="0 0 200 120" class="w-64 h-40 mx-auto"><rect x="40" y="70" width="120" height="40" rx="4" fill="#334155" stroke="#94a3b8" stroke-width="2"/><circle cx="70" cy="90" r="4" fill="#cbd5e1"/><circle cx="90" cy="95" r="4" fill="#cbd5e1"/><path d="M120 40 L150 40 L150 60 L135 60 L135 50 L120 50 Z" fill="#ef4444"/><rect x="110" y="40" width="10" height="20" fill="#94a3b8"/></svg>`,
-        question: "A beaker contains a dry mixture of iron filings, sand, and small pebbles. Which physical property allows a magnet to separate the iron filings first?",
-        options: [
-          { text: "Magnetic attraction", correct: true },
-          { text: "Particle size", correct: false },
-          { text: "Solubility in liquid", correct: false },
-          { text: "Relative density", correct: false }
-        ],
-        explanation: "Iron is magnetic, while sand and pebbles are not. The magnet separates the iron based on magnetism without changing any substances."
-      },
-      {
-        id: "demo-03",
-        category: "States & Kinetic Energy",
-        benchmark: "SC.5.P.8.1",
-        dok: 2,
         type: "3d-canvas",
-        visualPayload: "particles-gas",
-        question: "Inside a sealed glass cylinder, particles of matter move rapidly in all directions and bounce off the walls far apart from one another. How will this sample behave?",
+        canvasModel: "particles-solid",
+        question: "Which state of matter has both a definite shape and a definite volume?",
         options: [
-          { text: "It will expand to fill the entire shape and volume of the cylinder", correct: true },
-          { text: "It will settle at the bottom with a fixed volume and variable shape", correct: false },
-          { text: "It will keep its own rigid shape regardless of the cylinder", correct: false },
-          { text: "Its particles will lock into a crystal lattice at room temperature", correct: false }
+          { text: "Solid", correct: true },
+          { text: "Liquid", correct: false },
+          { text: "Gas", correct: false },
+          { text: "Plasma", correct: false }
         ],
-        explanation: "Gas particles have high kinetic energy and very weak attraction between particles, so they spread out to take both the shape and total volume of their closed container."
+        explanation: "A solid holds a definite shape and a definite volume because its particles are packed in a fixed, vibrating structure."
       },
       {
-        id: "demo-04",
-        category: "Properties of Solutions",
-        benchmark: "SC.5.P.8.2",
-        dok: 3,
-        type: "svg",
-        visualPayload: `<svg viewBox="0 0 320 130" class="w-80 h-40 mx-auto">
-          <!-- Warm Beaker (Left) -->
-          <rect x="28" y="25" width="95" height="82" rx="8" fill="#0f172a" stroke="#f8fafc" stroke-width="2.5"/>
-          <rect x="31" y="48" width="89" height="56" rx="5" fill="rgba(244,63,94,0.28)"/>
-          <circle cx="55" cy="75" r="3.5" fill="#fda4af"/><circle cx="78" cy="65" r="3" fill="#fda4af"/><circle cx="95" cy="84" r="3.5" fill="#fda4af"/>
-          <text x="75" y="18" text-anchor="middle" fill="#fda4af" font-size="12" font-weight="bold">WARM (45°C)</text>
-          <text x="75" y="122" text-anchor="middle" fill="#e2e8f0" font-size="11">Small Stirred Crystals</text>
-          <!-- Cold Beaker (Right) -->
-          <rect x="195" y="25" width="95" height="82" rx="8" fill="#0f172a" stroke="#f8fafc" stroke-width="2.5"/>
-          <rect x="198" y="48" width="89" height="56" rx="5" fill="rgba(6,182,212,0.25)"/>
-          <rect x="228" y="84" width="28" height="16" rx="3" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
-          <text x="242" y="18" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="bold">COLD (10°C)</text>
-          <text x="242" y="122" text-anchor="middle" fill="#e2e8f0" font-size="11">1 Large Sugar Cube</text>
-        </svg>`,
-        question: "Two lab teams test how fast 10 grams of sugar dissolves in 200 mL of water. Which combination of conditions will cause the sugar to dissolve the FASTEST?",
-        options: [
-          { text: "Crushing the sugar into fine crystals, stirring, and using warm water", correct: true },
-          { text: "Using a single solid sugar cube in cold water without stirring", correct: false },
-          { text: "Cooling the water with ice while leaving the sugar undisturbed", correct: false },
-          { text: "Using larger sugar cubes in room-temperature water with a lid", correct: false }
-        ],
-        explanation: "Increasing temperature (faster water particle motion), stirring (bringing fresh solvent into contact with solute), and smaller particle size (greater surface area) all speed up dissolving."
-      },
-      {
-        id: "demo-05",
-        category: "Physical vs. Chemical Changes",
-        benchmark: "SC.5.P.9.1",
-        dok: 3,
+        id: "MAT-DOK1-02",
+        benchmark: "SC.5.P.8.1",
+        dok: 1,
+        category: "States & Atomic Theory",
         type: "text",
-        visualPayload: "Lab Observation Log: A student mixes clear vinegar with white baking soda in Beaker A (bubbles of gas rapidly form and the beaker cools). In Beaker B, the student heats solid ice until it melts into liquid water.",
-        question: "Based on the Lab Observation Log, which statement accurately compares what happened inside Beaker A and Beaker B?",
+        question: "What happens to the shape and volume of a gas when it is pumped into a closed glass container?",
         options: [
-          { text: "Beaker A formed a brand-new substance (chemical change), while Beaker B only changed state (physical change)", correct: true },
-          { text: "Both Beaker A and Beaker B underwent chemical changes because heat energy moved", correct: false },
-          { text: "Both Beaker A and Beaker B only underwent physical changes in state of matter", correct: false },
-          { text: "Beaker B formed a new gas substance, while Beaker A only separated a mixture", correct: false }
+          { text: "It takes the shape of the container but keeps a fixed volume", correct: false },
+          { text: "It takes both the shape and the total volume of the container", correct: true },
+          { text: "It keeps its original shape and original volume", correct: false },
+          { text: "It keeps its original shape but expands in volume", correct: false }
         ],
-        explanation: "Fizzing gas bubbles upon mixing vinegar and baking soda indicate a chemical reaction producing carbon dioxide gas. Melting ice is a phase change where H₂O remains H₂O."
+        explanation: "Gases have no definite shape and no definite volume; they spread out completely to fill any closed container."
+      },
+      {
+        id: "MAT-DOK1-03",
+        benchmark: "SC.5.P.8.4",
+        dok: 1,
+        category: "States & Atomic Theory",
+        type: "text",
+        question: "According to the particle model of matter, all matter is made of particles that —",
+        options: [
+          { text: "Can easily be seen with the naked human eye", correct: false },
+          { text: "Stop moving completely whenever they become liquid", correct: false },
+          { text: "Are too small to be seen without magnification", correct: true },
+          { text: "Disappear completely when a solid dissolves in water", correct: false }
+        ],
+        explanation: "All matter is composed of microscopic particles that cannot be seen without powerful magnification."
+      },
+      {
+        id: "MAT-DOK1-04",
+        benchmark: "SC.5.P.8.1",
+        dok: 1,
+        category: "Measuring & Properties",
+        type: "image",
+        imageSrc: "images/pan_balance.webp",
+        imageAlt: "Mechanical two-pan balance measuring mass",
+        question: "Which scientific tool is used to measure the mass of an object in grams?",
+        options: [
+          { text: "Graduated cylinder", correct: false },
+          { text: "Pan balance", correct: true },
+          { text: "Spring scale", correct: false },
+          { text: "Metric ruler", correct: false }
+        ],
+        explanation: "A pan balance (or electronic balance) measures mass in grams or kilograms. Spring scales measure weight/force."
+      },
+      {
+        id: "MAT-DOK1-05",
+        benchmark: "SC.5.P.8.1",
+        dok: 1,
+        category: "Measuring & Properties",
+        type: "text",
+        question: "Which metric unit of measurement is used to record the volume of a liquid sample?",
+        options: [
+          { text: "Grams (g)", correct: false },
+          { text: "Centimeters (cm)", correct: false },
+          { text: "Milliliters (mL)", correct: true },
+          { text: "Degrees Celsius (°C)", correct: false }
+        ],
+        explanation: "Liquid volume measures the amount of space an object takes up and is recorded in milliliters (mL) or liters (L)."
+      },
+      {
+        id: "MAT-DOK1-06",
+        benchmark: "SC.5.P.8.1",
+        dok: 1,
+        category: "Measuring & Properties",
+        type: "image",
+        imageSrc: "images/sink_float.webp",
+        imageAlt: "Beaker of water with a floating wooden block and a sinking steel bolt",
+        question: "A plastic cube is placed in a tank of water and floats at the surface. What can you conclude about the cube?",
+        options: [
+          { text: "The cube is less dense than water", correct: true },
+          { text: "The cube is more dense than water", correct: false },
+          { text: "The cube has more mass than any object that sinks", correct: false },
+          { text: "The cube dissolved into the water", correct: false }
+        ],
+        explanation: "Objects float if they are less dense than the liquid they are placed in, regardless of their total size or mass."
+      },
+      {
+        id: "MAT-DOK1-07",
+        benchmark: "SC.5.P.8.3",
+        dok: 1,
+        category: "Mixtures & Solutions",
+        type: "text",
+        question: "What is true about the individual substances that make up a mixture?",
+        options: [
+          { text: "They combine to form a brand new chemical substance", correct: false },
+          { text: "They each maintain their own individual physical properties", correct: true },
+          { text: "They can never be separated once they are mixed together", correct: false },
+          { text: "They always change their state of matter into a liquid", correct: false }
+        ],
+        explanation: "In a mixture, substances blend physically but keep their individual identities and physical properties."
+      },
+      {
+        id: "MAT-DOK1-08",
+        benchmark: "SC.5.P.8.2",
+        dok: 1,
+        category: "Mixtures & Solutions",
+        type: "text",
+        question: "A solution is a special type of mixture in which one substance —",
+        options: [
+          { text: "Dissolves and spreads evenly throughout another substance", correct: true },
+          { text: "Settles immediately to the bottom as a heavy layer", correct: false },
+          { text: "Undergoes a chemical reaction and produces gas bubbles", correct: false },
+          { text: "Turns permanently into a solid block", correct: false }
+        ],
+        explanation: "A solution is a homogeneous mixture where solute particles dissolve and disperse evenly within a solvent."
+      },
+      {
+        id: "MAT-DOK1-09",
+        benchmark: "SC.5.P.8.2",
+        dok: 1,
+        category: "Mixtures & Solutions",
+        type: "image",
+        imageSrc: "images/stirring_beaker.webp",
+        imageAlt: "Glass stir rod mixing sugar in a beaker of water",
+        question: "Which of the following actions will SPEED UP how fast sugar dissolves in a beaker of water?",
+        options: [
+          { text: "Cooling the water with ice cubes", correct: false },
+          { text: "Using a single large sugar cube instead of granulated sugar", correct: false },
+          { text: "Stirring the water rapidly with a spoon", correct: true },
+          { text: "Letting the water sit completely undisturbed in the dark", correct: false }
+        ],
+        explanation: "Stirring increases the contact between water molecules and sugar particles, accelerating the rate of dissolving."
+      },
+      {
+        id: "MAT-DOK1-10",
+        benchmark: "SC.5.P.8.3",
+        dok: 1,
+        category: "Separating Matter",
+        type: "image",
+        imageSrc: "images/bar_magnet_iron.webp",
+        imageAlt: "Bar magnet attracting iron filings out of sand",
+        question: "Which tool is best suited to separate iron filings from dry sand?",
+        options: [
+          { text: "Filter paper and funnel", correct: false },
+          { text: "Bar magnet", correct: true },
+          { text: "Wire mesh sieve", correct: false },
+          { text: "Hot plate", correct: false }
+        ],
+        explanation: "Iron has magnetic attraction, whereas sand does not. A magnet separates iron cleanly based on magnetic properties."
+      },
+      {
+        id: "MAT-DOK1-11",
+        benchmark: "SC.5.P.8.3",
+        dok: 1,
+        category: "Separating Matter",
+        type: "text",
+        question: "Which tool would a scientist use to separate gravel from sand based on particle size?",
+        options: [
+          { text: "A magnet", correct: false },
+          { text: "A screen sieve", correct: true },
+          { text: "A thermometer", correct: false },
+          { text: "A hot plate", correct: false }
+        ],
+        explanation: "A sieve separates dry mixtures based on particle size: smaller sand grains pass through while larger gravel is trapped."
+      },
+      {
+        id: "MAT-DOK1-12",
+        benchmark: "SC.5.P.9.1",
+        dok: 1,
+        category: "Changes in Matter",
+        type: "text",
+        question: "Which of the following is an example of a physical change?",
+        options: [
+          { text: "Baking bread dough in an oven", correct: false },
+          { text: "Tearing a sheet of notebook paper into small strips", correct: true },
+          { text: "A metal bicycle chain rusting in the rain", correct: false },
+          { text: "Burning a wooden log into ashes in a fireplace", correct: false }
+        ],
+        explanation: "Tearing paper alters its shape and size, but the substance remains paper—no new substance is created."
+      },
+      {
+        id: "MAT-DOK1-13",
+        benchmark: "SC.5.P.9.1",
+        dok: 1,
+        category: "Changes in Matter",
+        type: "image",
+        imageSrc: "images/rust_nail.webp",
+        imageAlt: "Macro close-up of a rusty iron nail with pitting",
+        question: "Which observation provides the clearest evidence that a chemical change has occurred?",
+        options: [
+          { text: "A solid block of ice melts into liquid water", correct: false },
+          { text: "A shiny iron nail develops reddish-orange rust and pits", correct: true },
+          { text: "Liquid water boils and forms water vapor", correct: false },
+          { text: "A glass beaker breaks into smaller glass pieces", correct: false }
+        ],
+        explanation: "Rusting creates a completely new substance (iron oxide) with different properties, indicating a chemical change."
+      },
+      {
+        id: "MAT-DOK1-14",
+        benchmark: "SC.5.P.9.1",
+        dok: 1,
+        category: "Changes in Matter",
+        type: "text",
+        question: "What temperature in degrees Celsius represents the freezing point of pure water?",
+        options: [
+          { text: "100°C", correct: false },
+          { text: "32°C", correct: false },
+          { text: "0°C", correct: true },
+          { text: "50°C", correct: false }
+        ],
+        explanation: "Pure water freezes at 0°C (and boils at 100°C). 32° is Fahrenheit, which students often confuse with Celsius."
+      },
+      {
+        id: "MAT-DOK1-15",
+        benchmark: "SC.5.P.9.1",
+        dok: 1,
+        category: "Phase Changes & Heat",
+        type: "3d-canvas",
+        canvasModel: "particles-gas",
+        question: "What phase change takes place when liquid water gains heat and turns into water vapor?",
+        options: [
+          { text: "Condensation", correct: false },
+          { text: "Freezing", correct: false },
+          { text: "Evaporation", correct: true },
+          { text: "Melting", correct: false }
+        ],
+        explanation: "Evaporation occurs when liquid particles absorb thermal energy and escape as gas (water vapor)."
       }
     ];
+
+    const QUESTION_BANK = DOK1_QUESTIONS;
 
     // =========================================================================
     // GAME STATE MACHINE
@@ -2019,6 +2163,84 @@
       loadQuestion();
     }
 
+    function escapeXmlText(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+    }
+
+    function buildProceduralImagePlaceholder(imageTitle, imagePath, benchmark, category) {
+      const title = String(imageTitle || imagePath || "Laboratory Visual Evidence").trim();
+      const words = title.split(/\s+/);
+      let line1 = "";
+      let line2 = "";
+      words.forEach((word) => {
+        if ((line1 + " " + word).trim().length <= 44 || !line1) {
+          line1 = (line1 + " " + word).trim();
+        } else {
+          line2 = (line2 + " " + word).trim();
+        }
+      });
+      if (line2.length > 48) {
+        line2 = line2.slice(0, 45) + "...";
+      }
+
+      const safeLine1 = escapeXmlText(line1);
+      const safeLine2 = escapeXmlText(line2);
+      const safePath = escapeXmlText(imagePath || "images/lab_specimen.webp");
+      const safeMeta = escapeXmlText(`${category || "Matter Lab"} • ${benchmark || "SC.5.P"}`);
+
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 420" width="880" height="420">
+        <defs>
+          <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#090d16"/>
+            <stop offset="55%" stop-color="#0f172a"/>
+            <stop offset="100%" stop-color="#1e293b"/>
+          </linearGradient>
+          <linearGradient id="liqGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.88"/>
+            <stop offset="100%" stop-color="#10b981" stop-opacity="0.92"/>
+          </linearGradient>
+          <pattern id="gridPat" width="32" height="32" patternUnits="userSpaceOnUse">
+            <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(56,189,248,0.09)" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="880" height="420" rx="20" fill="url(#bgGrad)"/>
+        <rect width="880" height="420" rx="20" fill="url(#gridPat)"/>
+        <rect x="10" y="10" width="860" height="400" rx="16" fill="none" stroke="rgba(6,182,212,0.45)" stroke-width="2.5" stroke-dasharray="10 6"/>
+
+        <!-- Top Benchmark & Category Pill -->
+        <rect x="270" y="26" width="340" height="32" rx="16" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5"/>
+        <text x="440" y="47" text-anchor="middle" fill="#67e8f9" font-family="monospace, sans-serif" font-size="14" font-weight="bold" letter-spacing="1.5">${safeMeta}</text>
+
+        <!-- Glowing Laboratory Beaker Icon -->
+        <g transform="translate(380, 74)">
+          <circle cx="60" cy="72" r="68" fill="rgba(6,182,212,0.12)" stroke="rgba(6,182,212,0.3)" stroke-width="1.5"/>
+          <path d="M35 16 H85 M42 16 V42 L20 106 C17 115 23 124 33 124 H87 C97 124 103 115 100 106 L78 42 V16" fill="rgba(15,23,42,0.85)" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M29 82 Q60 74 91 82 L97 104 C99 112 94 119 85 119 H35 C26 119 21 112 23 104 Z" fill="url(#liqGrad)"/>
+          <circle cx="48" cy="102" r="5" fill="#ecfeff" opacity="0.85"/>
+          <circle cx="68" cy="94" r="6.5" fill="#ecfeff" opacity="0.85"/>
+          <circle cx="58" cy="70" r="4" fill="#67e8f9" opacity="0.9"/>
+          <circle cx="73" cy="56" r="3" fill="#34d399" opacity="0.9"/>
+          <line x1="42" y1="62" x2="54" y2="62" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="36" y1="78" x2="50" y2="78" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+
+        <!-- Image Title Readout -->
+        <text x="440" y="268" text-anchor="middle" fill="#f8fafc" font-family="sans-serif" font-size="25" font-weight="bold">${safeLine1}</text>
+        ${safeLine2 ? `<text x="440" y="302" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="22" font-weight="bold">${safeLine2}</text>` : ""}
+
+        <!-- Asset Path Tag -->
+        <rect x="250" y="338" width="380" height="36" rx="10" fill="rgba(15,23,42,0.9)" stroke="#334155" stroke-width="1.5"/>
+        <text x="440" y="361" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="14" font-weight="bold">🔬 LAB VISUAL: ${safePath}</text>
+      </svg>`;
+
+      return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    }
+
     function loadQuestion() {
       stopQuestionTimer();
       const q = QUESTION_BANK[gameState.currentQuestionIndex];
@@ -2061,14 +2283,20 @@
         const resolvedSrc = q.imageSrc || q.visualPayload;
         const resolvedAlt = q.imageAlt || `${q.category} (${q.benchmark}) — Laboratory Visual Evidence`;
         if (questionImageEl) {
-          questionImageEl.src = resolvedSrc;
+          questionImageEl.dataset.fallbackApplied = "false";
+          questionImageEl.onerror = function () {
+            if (this.dataset.fallbackApplied === "true") return;
+            this.dataset.fallbackApplied = "true";
+            this.src = buildProceduralImagePlaceholder(resolvedAlt, resolvedSrc, q.benchmark, q.category);
+          };
           questionImageEl.alt = resolvedAlt;
+          questionImageEl.src = resolvedSrc;
         }
         if (imageStage) imageStage.classList.remove("hidden");
       } else if (q.type === "3d-canvas") {
         mediaBadge.textContent = "3D PARTICLE SIMULATOR";
         canvasStage.classList.remove("hidden");
-        initParticleSimulation(q.visualPayload || "particles-solid");
+        initParticleSimulation(q.canvasModel || q.visualPayload || "particles-solid");
       } else if (q.type === "svg") {
         mediaBadge.textContent = "LAB APPARATUS DIAGRAM";
         particleSim.running = false;
@@ -2348,8 +2576,19 @@
       if (!src) return;
 
       const alt = (questionImageEl && questionImageEl.getAttribute("alt")) || (q && q.imageAlt) || "Laboratory Evidence View";
-      lightboxImg.src = src;
+      lightboxImg.dataset.fallbackApplied = "false";
+      lightboxImg.onerror = function () {
+        if (this.dataset.fallbackApplied === "true") return;
+        this.dataset.fallbackApplied = "true";
+        this.src = buildProceduralImagePlaceholder(
+          alt,
+          q ? (q.imageSrc || q.visualPayload) : src,
+          q ? q.benchmark : "",
+          q ? q.category : ""
+        );
+      };
       lightboxImg.alt = alt;
+      lightboxImg.src = src;
       if (lightboxCaption) {
         lightboxCaption.textContent = alt;
       }
