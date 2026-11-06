@@ -482,7 +482,7 @@
           <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b-2 border-slate-700/80">
             <div class="flex flex-wrap items-center gap-2.5">
               <span id="question-counter-pill" class="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 border-2 border-cyan-400 text-cyan-200 font-mono-digital font-black text-base md:text-lg lg:text-xl shrink-0">
-                QUESTION 1 OF 15
+                QUESTION 1 OF 30
               </span>
               <!-- Quick question jump pills for teacher control -->
               <div id="question-dots" class="hidden sm:flex flex-wrap items-center gap-1"></div>
@@ -1157,6 +1157,436 @@
           { text: "Melting", correct: false }
         ],
         explanation: "Evaporation occurs when liquid particles absorb thermal energy and escape as gas (water vapor)."
+      },
+      {
+        id: "MAT-DOK2-01",
+        benchmark: "SC.5.P.8.1",
+        dok: 2,
+        category: "Measuring & Properties",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 420 220" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Cylinder 1 (Before) -->
+      <g transform="translate(60, 20)">
+        <rect x="20" y="20" width="60" height="150" rx="4" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+        <path d="M 22 95 L 78 95 L 78 168 L 22 168 Z" fill="#0284c7" fill-opacity="0.4"/>
+        <line x1="22" y1="95" x2="78" y2="95" stroke="#38bdf8" stroke-width="2"/>
+        <!-- Graduations -->
+        <line x1="20" y1="50" x2="35" y2="50" stroke="#cbd5e1" stroke-width="1.5"/><text x="14" y="53" font-size="8" fill="#94a3b8" text-anchor="end">80</text>
+        <line x1="20" y1="72" x2="35" y2="72" stroke="#cbd5e1" stroke-width="1.5"/><text x="14" y="75" font-size="8" fill="#94a3b8" text-anchor="end">65</text>
+        <line x1="20" y1="95" x2="40" y2="95" stroke="#38bdf8" stroke-width="2"/><text x="14" y="98" font-size="8" font-weight="bold" fill="#38bdf8" text-anchor="end">50 mL</text>
+        <line x1="20" y1="120" x2="35" y2="120" stroke="#cbd5e1" stroke-width="1.5"/><text x="14" y="123" font-size="8" fill="#94a3b8" text-anchor="end">35</text>
+        <text x="50" y="190" font-size="11" font-weight="bold" fill="#94a3b8" text-anchor="middle">Initial Level</text>
+      </g>
+      <!-- Submerged Rock Arrow -->
+      <path d="M 175 90 L 225 90" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3"/>
+      <polygon points="225,86 235,90 225,94" fill="#f59e0b"/>
+      <text x="205" y="80" font-size="9" fill="#f59e0b" text-anchor="middle">Add Rock</text>
+      <!-- Cylinder 2 (After) -->
+      <g transform="translate(240, 20)">
+        <rect x="20" y="20" width="60" height="150" rx="4" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+        <path d="M 22 72 L 78 72 L 78 168 L 22 168 Z" fill="#0284c7" fill-opacity="0.4"/>
+        <line x1="22" y1="72" x2="78" y2="72" stroke="#38bdf8" stroke-width="2"/>
+        <!-- Graduations -->
+        <line x1="20" y1="50" x2="35" y2="50" stroke="#cbd5e1" stroke-width="1.5"/><text x="14" y="53" font-size="8" fill="#94a3b8" text-anchor="end">80</text>
+        <line x1="20" y1="72" x2="40" y2="72" stroke="#38bdf8" stroke-width="2"/><text x="14" y="75" font-size="8" font-weight="bold" fill="#38bdf8" text-anchor="end">65 mL</text>
+        <line x1="20" y1="95" x2="35" y2="95" stroke="#cbd5e1" stroke-width="1.5"/><text x="14" y="98" font-size="8" fill="#94a3b8" text-anchor="end">50</text>
+        <!-- Submerged Rock -->
+        <polygon points="40,150 48,135 62,138 68,155 52,162" fill="#64748b" stroke="#cbd5e1" stroke-width="1.5"/>
+        <text x="50" y="190" font-size="11" font-weight="bold" fill="#38bdf8" text-anchor="middle">Final Level</text>
+      </g>
+    </svg>`,
+        question: "A student places a 45 g irregular rock into a graduated cylinder. Based on the water displacement shown in the diagram, what is the exact volume of the rock?",
+        options: [
+          { text: "15 mL", correct: true },
+          { text: "65 mL", correct: false },
+          { text: "50 mL", correct: false },
+          { text: "45 mL", correct: false }
+        ],
+        explanation: "Volume of an irregular object is determined by displacement: Final Volume (65 mL) - Initial Volume (50 mL) = 15 mL. The 45 g mass is extra information."
+      },
+      {
+        id: "MAT-DOK2-02",
+        benchmark: "SC.5.P.9.1",
+        dok: 2,
+        category: "Phase Changes & Heat",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 400 210" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Container 1: Solid Ice Sealed -->
+      <g transform="translate(40, 20)">
+        <rect x="20" y="30" width="110" height="120" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <line x1="20" y1="45" x2="130" y2="45" stroke="#f43f5e" stroke-width="3"/>
+        <text x="75" y="40" font-size="8" fill="#f43f5e" font-weight="bold" text-anchor="middle">AIRTIGHT SEAL</text>
+        <rect x="45" y="75" width="30" height="30" rx="4" fill="#bae6fd" stroke="#38bdf8" stroke-width="1.5"/>
+        <rect x="70" y="85" width="25" height="25" rx="4" fill="#bae6fd" stroke="#38bdf8" stroke-width="1.5"/>
+        <rect x="50" y="160" width="50" height="22" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+        <text x="75" y="175" font-size="11" font-weight="bold" fill="#10b981" text-anchor="middle">120 g</text>
+        <text x="75" y="200" font-size="10" fill="#94a3b8" text-anchor="middle">Solid Ice</text>
+      </g>
+      <!-- Melting Arrow -->
+      <g transform="translate(180, 80)">
+        <text x="20" y="-8" font-size="9" font-weight="bold" fill="#f59e0b" text-anchor="middle">+ HEAT</text>
+        <line x1="0" y1="5" x2="40" y2="5" stroke="#f59e0b" stroke-width="3"/>
+        <polygon points="40,0 48,5 40,10" fill="#f59e0b"/>
+      </g>
+      <!-- Container 2: Liquid Water Sealed -->
+      <g transform="translate(230, 20)">
+        <rect x="20" y="30" width="110" height="120" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <line x1="20" y1="45" x2="130" y2="45" stroke="#f43f5e" stroke-width="3"/>
+        <text x="75" y="40" font-size="8" fill="#f43f5e" font-weight="bold" text-anchor="middle">AIRTIGHT SEAL</text>
+        <path d="M 22 100 Q 75 95, 128 100 L 128 148 Q 128 148, 22 148 Z" fill="#0284c7" fill-opacity="0.4"/>
+        <rect x="50" y="160" width="50" height="22" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+        <text x="75" y="175" font-size="11" font-weight="bold" fill="#10b981" text-anchor="middle">? g</text>
+        <text x="75" y="200" font-size="10" fill="#38bdf8" text-anchor="middle">Liquid Water</text>
+      </g>
+    </svg>`,
+        question: "A student places 120 grams of ice cubes into an airtight sealed plastic container. The container is left in a warm room until all the ice completely melts into liquid water. What is the total mass of the liquid water and container?",
+        options: [
+          { text: "Exactly 120 grams because mass is conserved during physical phase changes", correct: true },
+          { text: "Less than 120 grams because liquids have lower mass than solids", correct: false },
+          { text: "More than 120 grams because thermal energy added mass to the water", correct: false },
+          { text: "0 grams because the ice dissolved into water vapor", correct: false }
+        ],
+        explanation: "Matter cannot be created or destroyed. In a closed system, melting does not change the amount of matter, so the mass remains exactly 120 grams."
+      },
+      {
+        id: "MAT-DOK2-03",
+        benchmark: "SC.5.P.8.2",
+        dok: 2,
+        category: "Mixtures & Solutions",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 420 220" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Trial A -->
+      <g transform="translate(15, 20)">
+        <rect x="0" y="20" width="80" height="110" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1.5"/>
+        <text x="40" y="12" font-size="10" font-weight="bold" fill="#cbd5e1" text-anchor="middle">TRIAL A</text>
+        <rect x="30" y="70" width="20" height="20" fill="#f8fafc" stroke="#94a3b8"/>
+        <text x="40" y="110" font-size="8" fill="#38bdf8" text-anchor="middle">20°C / No Stir</text>
+        <text x="40" y="122" font-size="8" fill="#f59e0b" text-anchor="middle">1 Whole Cube</text>
+        <text x="40" y="150" font-size="10" font-weight="bold" fill="#f43f5e" text-anchor="middle">180 sec</text>
+      </g>
+      <!-- Trial B -->
+      <g transform="translate(115, 20)">
+        <rect x="0" y="20" width="80" height="110" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1.5"/>
+        <text x="40" y="12" font-size="10" font-weight="bold" fill="#cbd5e1" text-anchor="middle">TRIAL B</text>
+        <rect x="30" y="70" width="20" height="20" fill="#f8fafc" stroke="#94a3b8"/>
+        <line x1="20" y1="40" x2="60" y2="70" stroke="#f8fafc" stroke-width="3"/>
+        <text x="40" y="110" font-size="8" fill="#38bdf8" text-anchor="middle">20°C / Stirred</text>
+        <text x="40" y="122" font-size="8" fill="#f59e0b" text-anchor="middle">1 Whole Cube</text>
+        <text x="40" y="150" font-size="10" font-weight="bold" fill="#f43f5e" text-anchor="middle">95 sec</text>
+      </g>
+      <!-- Trial C -->
+      <g transform="translate(215, 20)">
+        <rect x="0" y="20" width="80" height="110" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1.5"/>
+        <text x="40" y="12" font-size="10" font-weight="bold" fill="#cbd5e1" text-anchor="middle">TRIAL C</text>
+        <!-- Crushed Granules -->
+        <circle cx="35" cy="75" r="2" fill="#fff"/><circle cx="45" cy="78" r="2" fill="#fff"/><circle cx="40" cy="85" r="2" fill="#fff"/>
+        <line x1="20" y1="40" x2="60" y2="70" stroke="#f8fafc" stroke-width="3"/>
+        <text x="40" y="110" font-size="8" fill="#38bdf8" text-anchor="middle">20°C / Stirred</text>
+        <text x="40" y="122" font-size="8" fill="#f59e0b" text-anchor="middle">Crushed Sugar</text>
+        <text x="40" y="150" font-size="10" font-weight="bold" fill="#f43f5e" text-anchor="middle">40 sec</text>
+      </g>
+      <!-- Trial D (Target) -->
+      <g transform="translate(315, 20)">
+        <rect x="0" y="20" width="80" height="110" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="40" y="12" font-size="10" font-weight="bold" fill="#10b981" text-anchor="middle">TRIAL D</text>
+        <circle cx="35" cy="75" r="2" fill="#fff"/><circle cx="45" cy="78" r="2" fill="#fff"/><circle cx="40" cy="85" r="2" fill="#fff"/>
+        <line x1="20" y1="40" x2="60" y2="70" stroke="#f8fafc" stroke-width="3"/>
+        <text x="40" y="110" font-size="8" fill="#f43f5e" text-anchor="middle">60°C / Stirred</text>
+        <text x="40" y="122" font-size="8" fill="#f59e0b" text-anchor="middle">Crushed Sugar</text>
+        <text x="40" y="150" font-size="10" font-weight="bold" fill="#10b981" text-anchor="middle">? sec</text>
+      </g>
+    </svg>`,
+        question: "A group of students conducts four dissolving trials using 10 grams of sugar in 100 mL of water. Based on the patterns shown across Trials A, B, and C, what is the most reasonable prediction for the dissolving time in Trial D?",
+        options: [
+          { text: "Less than 40 seconds because both warmer water and smaller particle size speed up dissolving", correct: true },
+          { text: "Between 40 and 95 seconds because high heat slows down liquid motion", correct: false },
+          { text: "Exactly 180 seconds because temperature does not affect dissolving rates", correct: false },
+          { text: "Over 200 seconds because heat causes sugar to turn solid again", correct: false }
+        ],
+        explanation: "Crushing increases surface area, stirring speeds contact, and heating from 20°C to 60°C adds thermal energy, making Trial D faster than 40 seconds."
+      },
+      {
+        id: "MAT-DOK2-04",
+        benchmark: "SC.5.P.8.3",
+        dok: 2,
+        category: "Separating Matter",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 420 220" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Mixture Box -->
+      <rect x="20" y="70" width="100" height="70" rx="6" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="70" y="90" font-size="9" font-weight="bold" fill="#f8fafc" text-anchor="middle">MIXTURE</text>
+      <text x="70" y="105" font-size="8" fill="#cbd5e1" text-anchor="middle">• Sand</text>
+      <text x="70" y="118" font-size="8" fill="#cbd5e1" text-anchor="middle">• Iron Filings</text>
+      <text x="70" y="131" font-size="8" fill="#cbd5e1" text-anchor="middle">• Salt</text>
+      <!-- Arrow 1 -->
+      <line x1="120" y1="105" x2="155" y2="105" stroke="#38bdf8" stroke-width="2"/>
+      <!-- Step 1 Box -->
+      <rect x="155" y="80" width="75" height="50" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+      <text x="192" y="100" font-size="9" font-weight="bold" fill="#ef4444" text-anchor="middle">STEP 1</text>
+      <text x="192" y="118" font-size="8" fill="#f8fafc" text-anchor="middle">Magnet</text>
+      <!-- Arrow 2 -->
+      <line x1="230" y1="105" x2="265" y2="105" stroke="#38bdf8" stroke-width="2"/>
+      <!-- Step 2 Box -->
+      <rect x="265" y="80" width="75" height="50" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+      <text x="302" y="100" font-size="9" font-weight="bold" fill="#38bdf8" text-anchor="middle">STEP 2</text>
+      <text x="302" y="118" font-size="8" fill="#f8fafc" text-anchor="middle">Add Water</text>
+      <!-- Arrow 3 -->
+      <line x1="340" y1="105" x2="365" y2="105" stroke="#38bdf8" stroke-width="2"/>
+      <!-- Question Mark Box -->
+      <rect x="365" y="80" width="45" height="50" rx="4" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+      <text x="387" y="110" font-size="16" font-weight="bold" fill="#f59e0b" text-anchor="middle">?</text>
+    </svg>`,
+        question: "A student wants to separate a dry mixture of sand, iron filings, and salt. First, she uses a magnet to remove the iron. Next, she adds water to dissolve the salt. What is the correct next step to completely isolate the sand?",
+        options: [
+          { text: "Pour the mixture through filter paper into a beaker", correct: true },
+          { text: "Heat the liquid to boil away the water immediately", correct: false },
+          { text: "Pass the wet mixture through a wire screen sieve", correct: false },
+          { text: "Use another magnet to pick up the wet sand grains", correct: false }
+        ],
+        explanation: "Pouring the wet mixture through filter paper traps insoluble sand on the paper while dissolved saltwater passes through."
+      },
+      {
+        id: "MAT-DOK2-05",
+        benchmark: "SC.5.P.9.1",
+        dok: 2,
+        category: "Physical vs. Chemical",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 400 200" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Beaker 1: Fizzing Reaction -->
+      <g transform="translate(60, 20)">
+        <rect x="10" y="30" width="100" height="120" rx="4" fill="#1e293b" stroke="#94a3b8" stroke-width="2"/>
+        <path d="M 12 85 L 108 85 L 108 148 L 12 148 Z" fill="#0284c7" fill-opacity="0.3"/>
+        <!-- Bubbles -->
+        <circle cx="35" cy="110" r="4" fill="#38bdf8"/><circle cx="50" cy="95" r="5" fill="#38bdf8"/>
+        <circle cx="75" cy="105" r="3.5" fill="#38bdf8"/><circle cx="60" cy="120" r="4.5" fill="#38bdf8"/>
+        <!-- Temperature Badge -->
+        <rect x="25" y="160" width="70" height="20" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="1.5"/>
+        <text x="60" y="174" font-size="10" font-weight="bold" fill="#f43f5e" text-anchor="middle">Temp: 34°C</text>
+        <text x="60" y="20" font-size="10" font-weight="bold" fill="#38bdf8" text-anchor="middle">Flask 1 (Baking Soda + Vinegar)</text>
+      </g>
+      <!-- Beaker 2: Sugar Dissolving -->
+      <g transform="translate(240, 20)">
+        <rect x="10" y="30" width="100" height="120" rx="4" fill="#1e293b" stroke="#94a3b8" stroke-width="2"/>
+        <path d="M 12 85 L 108 85 L 108 148 L 12 148 Z" fill="#0284c7" fill-opacity="0.3"/>
+        <line x1="30" y1="40" x2="60" y2="120" stroke="#f8fafc" stroke-width="4" stroke-linecap="round"/>
+        <!-- Temperature Badge -->
+        <rect x="25" y="160" width="70" height="20" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+        <text x="60" y="174" font-size="10" font-weight="bold" fill="#10b981" text-anchor="middle">Temp: 22°C</text>
+        <text x="60" y="20" font-size="10" font-weight="bold" fill="#cbd5e1" text-anchor="middle">Flask 2 (Sugar + Water)</text>
+      </g>
+    </svg>`,
+        question: "A student mixes two substances in Flask 1 and observes vigorous bubbling and a temperature jump from 22°C to 34°C. In Flask 2, sugar is stirred into water at a constant 22°C until it becomes clear. How should these two events be classified?",
+        options: [
+          { text: "Flask 1 is a chemical change; Flask 2 is a physical change", correct: true },
+          { text: "Both flasks represent chemical changes because substances were combined", correct: false },
+          { text: "Both flasks represent physical changes because liquid remains in both", correct: false },
+          { text: "Flask 1 is a physical change; Flask 2 is a chemical change", correct: false }
+        ],
+        explanation: "Flask 1 produces gas bubbles and thermal energy change, signaling a chemical reaction. Flask 2 is dissolving, which is a reversible physical change."
+      },
+      {
+        id: "MAT-DOK2-06",
+        benchmark: "SC.5.P.8.1",
+        dok: 2,
+        category: "Measuring & Properties",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 400 200" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Block A -->
+      <g transform="translate(60, 40)">
+        <rect x="0" y="0" width="80" height="80" rx="4" fill="#334155" stroke="#38bdf8" stroke-width="2"/>
+        <text x="40" y="35" font-size="12" font-weight="bold" fill="#f8fafc" text-anchor="middle">BLOCK A</text>
+        <text x="40" y="55" font-size="10" fill="#94a3b8" text-anchor="middle">Mass = 50 g</text>
+        <text x="40" y="110" font-size="10" fill="#38bdf8" text-anchor="middle">Large Wood Block</text>
+      </g>
+      <!-- Block B -->
+      <g transform="translate(240, 60)">
+        <rect x="0" y="0" width="40" height="40" rx="4" fill="#334155" stroke="#f59e0b" stroke-width="2"/>
+        <text x="20" y="18" font-size="9" font-weight="bold" fill="#f8fafc" text-anchor="middle">B</text>
+        <text x="20" y="30" font-size="7" fill="#94a3b8" text-anchor="middle">50 g</text>
+        <text x="20" y="70" font-size="10" fill="#f59e0b" text-anchor="middle">Small Lead Block</text>
+      </g>
+    </svg>`,
+        question: "A student has a large block of pine wood and a tiny block of lead. Both blocks have a mass of exactly 50 grams on a pan balance. What can the student correctly conclude about the volume of the two blocks?",
+        options: [
+          { text: "The wood block has a larger volume than the lead block because it takes up more space", correct: true },
+          { text: "Both blocks must have the exact same volume because they have the same mass", correct: false },
+          { text: "The lead block has a larger volume because it is made of metal", correct: false },
+          { text: "Neither block has volume because volume only applies to liquids", correct: false }
+        ],
+        explanation: "Mass measures matter (50 g each), while volume measures space. Because pine wood is less dense than lead, it requires a larger volume to reach 50 grams."
+      },
+      {
+        id: "MAT-DOK2-07",
+        benchmark: "SC.5.P.8.4",
+        dok: 2,
+        category: "States & Atomic Theory",
+        type: "3d-canvas",
+        canvasModel: "particles-gas",
+        question: "A balloon filled with air is placed inside a freezer for one hour. When removed, the balloon appears shrunken and deflated. What happened to the air particles inside the balloon?",
+        options: [
+          { text: "The particles lost thermal energy, slowed down, and moved closer together", correct: true },
+          { text: "Many of the air particles escaped through the solid rubber skin", correct: false },
+          { text: "The air particles shrank in individual size and lost mass", correct: false },
+          { text: "The air particles chemically combined and turned into ice", correct: false }
+        ],
+        explanation: "Cooling gas particles slows them down, reducing collision force and causing them to draw closer together, shrinking the volume without losing particles."
+      },
+      {
+        id: "MAT-DOK2-08",
+        benchmark: "SC.5.P.8.2",
+        dok: 2,
+        category: "Mixtures & Solutions",
+        type: "text",
+        question: "Maya wants to test how water temperature affects how fast bath salts dissolve. To make her investigation a fair, controlled test, which group of variables must she keep constant across all trials?",
+        options: [
+          { text: "Amount of water, mass of salt, and stirring speed", correct: true },
+          { text: "Water temperature, mass of salt, and container shape", correct: false },
+          { text: "Water temperature, dissolving time, and room light", correct: false },
+          { text: "Amount of water, water temperature, and thermometer type", correct: false }
+        ],
+        explanation: "When testing temperature (the independent variable), all other conditions (water volume, solute mass, stirring speed) must be held constant as controls."
+      },
+      {
+        id: "MAT-DOK2-09",
+        benchmark: "SC.5.P.9.1",
+        dok: 2,
+        category: "Physical vs. Chemical",
+        type: "text",
+        question: "A chef leaves an uncovered stick of butter in a hot frying pan, and it turns into clear yellow liquid. Next, he leaves a slice of bread in the toaster until it turns black and gives off smoke. How are these two changes classified?",
+        options: [
+          { text: "Butter melting is a physical change; bread burning is a chemical change", correct: true },
+          { text: "Both changes are chemical because heat was added in both pans", correct: false },
+          { text: "Both changes are physical because you can still eat both foods", correct: false },
+          { text: "Butter melting is a chemical change; bread burning is a physical change", correct: false }
+        ],
+        explanation: "Melting butter is a reversible phase change (physical). Burning bread creates ash and smoke, which is an irreversible chemical reaction."
+      },
+      {
+        id: "MAT-DOK2-10",
+        benchmark: "SC.5.P.8.3",
+        dok: 2,
+        category: "Mixtures & Solutions",
+        type: "text",
+        question: "A student mixes 15 grams of table salt into 100 grams of pure water in a glass beaker. The salt dissolves completely until the liquid is transparent. What is the total mass of the resulting salt water solution?",
+        options: [
+          { text: "115 grams", correct: true },
+          { text: "100 grams", correct: false },
+          { text: "85 grams", correct: false },
+          { text: "15 grams", correct: false }
+        ],
+        explanation: "Mass is conserved in solutions: 100 g solvent + 15 g solute = 115 g solution. Even though salt cannot be seen, its matter and mass remain."
+      },
+      {
+        id: "MAT-DOK2-11",
+        benchmark: "SC.5.P.8.1",
+        dok: 2,
+        category: "Measuring & Properties",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 380 200" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Graduated Cylinder with 3 layers -->
+      <g transform="translate(140, 20)">
+        <rect x="20" y="20" width="60" height="150" rx="4" fill="#0f172a" stroke="#cbd5e1" stroke-width="2"/>
+        <!-- Layer 1: Corn Syrup (bottom) -->
+        <rect x="22" y="125" width="56" height="43" fill="#ca8a04" fill-opacity="0.8"/>
+        <text x="85" y="145" font-size="9" fill="#facc15" text-anchor="start">Corn Syrup (1.4 g/mL)</text>
+        <!-- Layer 2: Water (middle) -->
+        <rect x="22" y="80" width="56" height="45" fill="#0284c7" fill-opacity="0.5"/>
+        <text x="85" y="105" font-size="9" fill="#38bdf8" text-anchor="start">Water (1.0 g/mL)</text>
+        <!-- Layer 3: Oil (top) -->
+        <rect x="22" y="35" width="56" height="45" fill="#eab308" fill-opacity="0.4"/>
+        <text x="85" y="60" font-size="9" fill="#fde047" text-anchor="start">Vegetable Oil (0.9 g/mL)</text>
+      </g>
+    </svg>`,
+        question: "A student gently pours three liquids into a cylinder: vegetable oil, water, and corn syrup. The liquids settle into three distinct layers as shown. If a plastic bead that is less dense than water but more dense than vegetable oil is dropped into the cylinder, where will it settle?",
+        options: [
+          { text: "Floating right at the boundary between the vegetable oil and the water", correct: true },
+          { text: "At the very bottom of the cylinder underneath the corn syrup", correct: false },
+          { text: "Floating on top of the vegetable oil at the very surface", correct: false },
+          { text: "Completely dissolved evenly throughout all three liquid layers", correct: false }
+        ],
+        explanation: "An object sinks through liquids less dense than itself (oil) and floats on liquids more dense than itself (water), resting at the boundary."
+      },
+      {
+        id: "MAT-DOK2-12",
+        benchmark: "SC.5.P.8.3",
+        dok: 2,
+        category: "Separating Matter",
+        type: "text",
+        question: "A scientist has a clear beaker containing salt dissolved in water. Which procedure will successfully recover dry salt crystals?",
+        options: [
+          { text: "Boil the solution or leave it in sunlight until all the water evaporates", correct: true },
+          { text: "Pour the saltwater solution through thick laboratory filter paper", correct: false },
+          { text: "Pass a powerful neodymium magnet through the liquid", correct: false },
+          { text: "Pour the liquid through a fine wire mesh sieve", correct: false }
+        ],
+        explanation: "Dissolved salt particles are too small to be separated by filters or sieves. Evaporation removes the water solvent, leaving solid salt crystals behind."
+      },
+      {
+        id: "MAT-DOK2-13",
+        benchmark: "SC.5.P.9.1",
+        dok: 2,
+        category: "Phase Changes & Heat",
+        type: "text",
+        question: "On a humid summer morning in Florida, a student notices tiny droplets of liquid water covering the outside surface of an ice-cold lemonade cup. Where did this liquid water originate?",
+        options: [
+          { text: "Water vapor in the surrounding warm air lost heat upon touching the cold glass and condensed", correct: true },
+          { text: "Lemonade leaked through microscopic cracks in the solid glass wall", correct: false },
+          { text: "Cold ice inside the cup dissolved into the glass structure and soaked through", correct: false },
+          { text: "The cold temperature created new water atoms out of nothing", correct: false }
+        ],
+        explanation: "Condensation occurs when gaseous water vapor in humid air touches a cold surface, loses thermal energy, and changes phase into liquid droplets."
+      },
+      {
+        id: "MAT-DOK2-14",
+        benchmark: "SC.5.P.8.1",
+        dok: 2,
+        category: "Measuring & Properties",
+        type: "text",
+        question: "Two objects are placed onto opposite sides of an equal-arm pan balance. The left side holds a solid copper cube, and the right side holds an equal-size solid aluminum cube. The left pan dips lower than the right pan. What does this demonstrate?",
+        options: [
+          { text: "The copper cube has more mass than the aluminum cube", correct: true },
+          { text: "The copper cube has a larger volume than the aluminum cube", correct: false },
+          { text: "The aluminum cube has lost its physical properties", correct: false },
+          { text: "The pan balance measures temperature differences rather than mass", correct: false }
+        ],
+        explanation: "A pan balance compares mass. Even though both cubes have identical volume, the copper cube has greater mass, causing its pan to dip."
+      },
+      {
+        id: "MAT-DOK2-15",
+        benchmark: "SC.5.P.9.1",
+        dok: 2,
+        category: "Physical vs. Chemical",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 380 200" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Glowstick Intact -->
+      <g transform="translate(60, 30)">
+        <rect x="15" y="10" width="20" height="130" rx="10" fill="#334155" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="25" y1="30" x2="25" y2="120" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="8 4"/>
+        <text x="25" y="165" font-size="10" fill="#94a3b8" text-anchor="middle">Before Bending</text>
+        <text x="25" y="180" font-size="9" fill="#64748b" text-anchor="middle">(No Light)</text>
+      </g>
+      <!-- Snap Action -->
+      <path d="M 140 85 L 190 85" stroke="#f59e0b" stroke-width="2"/>
+      <polygon points="190,81 198,85 190,89" fill="#f59e0b"/>
+      <text x="165" y="75" font-size="9" font-weight="bold" fill="#f59e0b" text-anchor="middle">BEND &amp; SHAKE</text>
+      <!-- Glowstick Glowing -->
+      <g transform="translate(230, 30)">
+        <rect x="15" y="10" width="20" height="130" rx="10" fill="#10b981" stroke="#34d399" stroke-width="2"/>
+        <!-- Glow Aura -->
+        <circle cx="25" cy="75" r="35" fill="#10b981" fill-opacity="0.25"/>
+        <circle cx="25" cy="75" r="50" fill="#10b981" fill-opacity="0.12"/>
+        <text x="25" y="165" font-size="10" font-weight="bold" fill="#34d399" text-anchor="middle">After Bending</text>
+        <text x="25" y="180" font-size="9" font-weight="bold" fill="#10b981" text-anchor="middle">(Emits Light)</text>
+      </g>
+    </svg>`,
+        question: "When a student bends and snaps a plastic glow stick, an internal glass capsule breaks, two liquids mix, and the tube begins to emit bright green light without changing temperature. Why is this classified as a chemical change?",
+        options: [
+          { text: "Light production provides evidence that a new substance was created", correct: true },
+          { text: "The plastic tube changed its physical shape permanently", correct: false },
+          { text: "Bending an object is always classified as a chemical change", correct: false },
+          { text: "The liquids changed into a solid state inside the tube", correct: false }
+        ],
+        explanation: "Light emission is a classic indicator of a chemical reaction where energy is released as new substances form."
       }
     ];
 
