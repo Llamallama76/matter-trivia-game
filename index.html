@@ -499,32 +499,27 @@
             </p>
           </div>
 
-          <!-- Dedicated Media Display Area ('text' | 'svg' | '3d-canvas' | 'image') -->
+          <!-- Dedicated Media Display Area ('svg' | '3d-canvas' | 'text') -->
           <div id="media-display-container" class="my-3 rounded-2xl bg-slate-950/85 border-2 border-slate-700/90 p-3 md:p-4 flex flex-col items-center justify-center relative overflow-hidden min-h-[190px] md:min-h-[220px] shadow-inner">
-            <!-- High-Resolution Laboratory Image Viewport Target (when type === 'image') -->
-            <div id="media-image-stage" class="w-full flex items-center justify-center hidden">
+            <!-- SVG Laboratory Display Frame (when type === 'svg') -->
+            <div id="media-svg-stage" class="w-full flex items-center justify-center hidden">
               <div
-                id="media-image-frame"
+                id="media-svg-frame"
                 onclick="openImageLightbox()"
                 role="button"
                 tabindex="0"
-                aria-label="Inspect high-resolution laboratory image in full-screen lightbox"
+                aria-label="Inspect laboratory SVG diagram in full-screen lightbox"
                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openImageLightbox();}"
-                class="relative group inline-flex items-center justify-center rounded-xl border border-slate-700/60 bg-slate-950/90 shadow-[0_0_30px_rgba(6,182,212,0.18),0_10px_25px_-5px_rgba(0,0,0,0.8)] overflow-hidden cursor-zoom-in max-w-full transition-all duration-200 hover:border-cyan-400/70 hover:shadow-[0_0_38px_rgba(6,182,212,0.32)]"
+                class="relative group w-full max-w-2xl max-h-64 rounded-xl border border-slate-700/80 bg-slate-950/90 p-2 md:p-3 flex items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.16),0_10px_25px_-5px_rgba(0,0,0,0.8)] overflow-hidden cursor-zoom-in transition-all duration-200 hover:border-cyan-400/70 hover:shadow-[0_0_38px_rgba(6,182,212,0.3)]"
               >
-                <img
-                  id="question-image-el"
-                  src=""
-                  alt=""
-                  class="w-auto max-w-full max-h-[260px] md:max-h-[275px] object-contain rounded-xl select-none transition-transform duration-300 group-hover:scale-[1.015]"
-                />
+                <div id="media-svg-content" class="w-full max-h-56 flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.015]"></div>
                 <!-- Top-Right "Inspect / Enlarge" Icon Button Overlay -->
                 <button
                   type="button"
-                  id="inspect-image-btn"
+                  id="inspect-svg-btn"
                   onclick="event.stopPropagation(); openImageLightbox();"
-                  title="Inspect / Enlarge Image (Full-Screen Classroom View)"
-                  aria-label="Inspect or Enlarge Image"
+                  title="Inspect / Enlarge Diagram (Full-Screen Classroom View)"
+                  aria-label="Inspect or Enlarge Diagram"
                   class="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/85 hover:bg-cyan-500 text-cyan-200 hover:text-slate-950 border border-slate-600/80 hover:border-cyan-300 text-xs md:text-sm font-extrabold tracking-wide shadow-lg backdrop-blur-md transition-all duration-150"
                 >
                   <svg class="w-4 h-4 md:w-5 md:h-5 stroke-current" fill="none" stroke-width="2.4" viewBox="0 0 24 24">
@@ -535,12 +530,9 @@
               </div>
             </div>
 
-            <!-- SVG Injection Target -->
-            <div id="media-svg-stage" class="w-full flex items-center justify-center hidden"></div>
-
-            <!-- 3D / 2D Interactive Particle Simulation Canvas Target -->
+            <!-- 3D / 2D Interactive Particle Simulation Canvas Target (when type === '3d-canvas') -->
             <div id="media-canvas-stage" class="w-full flex flex-col items-center justify-center hidden">
-              <canvas id="particle-canvas" width="560" height="190" class="w-full max-w-[560px] h-[175px] md:h-[195px] rounded-xl bg-slate-950 border border-slate-800 cursor-pointer" title="Click or tap inside the chamber to send a thermal energy wave through the particles!"></canvas>
+              <canvas id="particle-canvas" width="560" height="190" class="w-full max-w-[560px] h-[175px] md:h-[195px] rounded-xl bg-slate-950 border border-slate-700/80 cursor-pointer" title="Click or tap inside the chamber to send a thermal energy wave through the particles!"></canvas>
               <div class="w-full max-w-[560px] flex flex-wrap items-center justify-between gap-2 mt-2 px-1 text-xs md:text-sm text-slate-300">
                 <span id="canvas-sim-caption" class="font-bold text-cyan-300">
                   Interactive Chamber: Click or tap particles to pulse kinetic energy
@@ -552,14 +544,6 @@
                   <button onclick="setCanvasOverride('particles-gas')" id="sim-btn-gas" class="px-2.5 py-0.5 rounded bg-slate-800 hover:bg-cyan-900 text-cyan-200 border border-cyan-500/50 font-bold transition">Gas</button>
                 </div>
               </div>
-            </div>
-
-            <!-- Pure Text Callout Banner (when type === 'text') -->
-            <div id="media-text-stage" class="w-full py-3 px-4 rounded-xl bg-slate-900/80 border border-cyan-500/30 text-center hidden">
-              <div class="text-sm md:text-base font-bold uppercase tracking-widest text-cyan-400 mb-1">
-                LABORATORY FIELD OBSERVATION NOTE
-              </div>
-              <p id="media-text-content" class="text-base md:text-lg text-slate-200 font-medium"></p>
             </div>
           </div>
 
@@ -822,14 +806,13 @@
       </button>
     </div>
 
-    <!-- Maximum Clear Size Image Viewport -->
+    <!-- Maximum Clear Size SVG / Media Viewport -->
     <div class="relative flex-1 w-full max-w-[1650px] flex items-center justify-center overflow-hidden">
-      <img
-        id="lightbox-image-el"
-        src=""
-        alt=""
-        class="max-w-[95vw] max-h-[82vh] w-auto h-auto object-contain rounded-2xl border-2 border-cyan-400/50 bg-slate-950/95 shadow-[0_0_70px_rgba(6,182,212,0.35)]"
-      />
+      <div
+        id="lightbox-svg-stage"
+        onclick="event.stopPropagation(); closeImageLightbox();"
+        class="w-[92vw] max-w-[1350px] h-[76vh] max-h-[800px] p-6 md:p-10 rounded-2xl border-2 border-cyan-400/50 bg-slate-950/95 shadow-[0_0_70px_rgba(6,182,212,0.35)] flex items-center justify-center"
+      ></div>
     </div>
 
     <div class="mt-3 text-xs md:text-sm font-bold tracking-wider uppercase text-slate-400">
@@ -839,173 +822,7 @@
 
   <!-- APPLICATION SCRIPT: DECOUPLED QUESTION BANK + GAME ENGINE -->
   <script>
-    // Self-contained high-resolution photorealistic laboratory SVG data URI (1600x900)
-    // Depicts a graduated cylinder meniscus, magnetic separation beaker with iron filings & sand, and digital lab scale
-    const LAB_HIGH_RES_SAMPLE_URI = "data:image/svg+xml;utf8," + encodeURIComponent(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="1200" height="680">
-        <defs>
-          <radialGradient id="labBg" cx="50%" cy="40%" r="70%">
-            <stop offset="0%" stop-color="#1e293b"/>
-            <stop offset="65%" stop-color="#0f172a"/>
-            <stop offset="100%" stop-color="#050811"/>
-          </radialGradient>
-          <linearGradient id="benchGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#334155"/>
-            <stop offset="15%" stop-color="#1e293b"/>
-            <stop offset="100%" stop-color="#090d16"/>
-          </linearGradient>
-          <linearGradient id="glassBody" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="rgba(255,255,255,0.28)"/>
-            <stop offset="18%" stop-color="rgba(226,232,240,0.07)"/>
-            <stop offset="50%" stop-color="rgba(15,23,42,0.15)"/>
-            <stop offset="85%" stop-color="rgba(56,189,248,0.14)"/>
-            <stop offset="100%" stop-color="rgba(255,255,255,0.32)"/>
-          </linearGradient>
-          <linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#eab308"/>
-            <stop offset="40%" stop-color="#ca8a04"/>
-            <stop offset="100%" stop-color="#854d0e"/>
-          </linearGradient>
-          <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="rgba(34,211,238,0.55)"/>
-            <stop offset="100%" stop-color="rgba(2,132,199,0.75)"/>
-          </linearGradient>
-          <linearGradient id="magnetRed" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#fb7185"/>
-            <stop offset="50%" stop-color="#e11d48"/>
-            <stop offset="100%" stop-color="#881337"/>
-          </linearGradient>
-          <linearGradient id="steelPole" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#f8fafc"/>
-            <stop offset="50%" stop-color="#94a3b8"/>
-            <stop offset="100%" stop-color="#cbd5e1"/>
-          </linearGradient>
-          <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="6" result="blur"/>
-            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-          </filter>
-        </defs>
-
-        <!-- Studio Lab Background & Grid -->
-        <rect width="1200" height="680" fill="url(#labBg)"/>
-        <g stroke="rgba(148,163,184,0.08)" stroke-width="1">
-          <line x1="0" y1="120" x2="1200" y2="120"/><line x1="0" y1="240" x2="1200" y2="240"/>
-          <line x1="0" y1="360" x2="1200" y2="360"/><line x1="0" y1="480" x2="1200" y2="480"/>
-          <line x1="200" y1="0" x2="200" y2="540"/><line x1="400" y1="0" x2="400" y2="540"/>
-          <line x1="600" y1="0" x2="600" y2="540"/><line x1="800" y1="0" x2="800" y2="540"/>
-          <line x1="1000" y1="0" x2="1000" y2="540"/>
-        </g>
-
-        <!-- Laboratory Bench Surface -->
-        <rect x="0" y="535" width="1200" height="145" fill="url(#benchGrad)"/>
-        <line x1="0" y1="535" x2="1200" y2="535" stroke="#475569" stroke-width="3"/>
-
-        <!-- LEFT: 100 mL Precision Graduated Cylinder (Control Reference) -->
-        <g transform="translate(150, 95)">
-          <ellipse cx="70" cy="442" rx="64" ry="12" fill="rgba(0,0,0,0.55)"/>
-          <path d="M22 435 L118 435 L106 420 L34 420 Z" fill="#64748b" stroke="#cbd5e1" stroke-width="2"/>
-          <rect x="36" y="30" width="68" height="392" rx="6" fill="url(#glassBody)" stroke="#e2e8f0" stroke-width="3"/>
-          <!-- Cyan Solution inside cylinder (70 mL mark) -->
-          <path d="M38 152 Q70 160 102 152 L102 418 L38 418 Z" fill="url(#waterGrad)"/>
-          <path d="M38 152 Q70 160 102 152 Q70 146 38 152 Z" fill="#a5f3fc" opacity="0.8"/>
-          <!-- High-Resolution Graduation Markings -->
-          <g stroke="#f8fafc" stroke-width="2" font-family="monospace" font-size="13" fill="#f8fafc" font-weight="bold">
-            <line x1="38" y1="70" x2="62" y2="70"/><text x="68" y="74" stroke="none">100mL</text>
-            <line x1="38" y1="105" x2="54" y2="105"/>
-            <line x1="38" y1="140" x2="62" y2="140"/><text x="68" y="144" stroke="none">80mL</text>
-            <line x1="38" y1="175" x2="54" y2="175"/>
-            <line x1="38" y1="210" x2="62" y2="210"/><text x="68" y="214" stroke="none">60mL</text>
-            <line x1="38" y1="245" x2="54" y2="245"/>
-            <line x1="38" y1="280" x2="62" y2="280"/><text x="68" y="284" stroke="none">40mL</text>
-            <line x1="38" y1="315" x2="54" y2="315"/>
-            <line x1="38" y1="350" x2="62" y2="350"/><text x="68" y="354" stroke="none">20mL</text>
-          </g>
-          <text x="70" y="472" text-anchor="middle" fill="#94a3b8" font-family="sans-serif" font-size="16" font-weight="bold">100 mL CYLINDER</text>
-        </g>
-
-        <!-- CENTER: 500 mL Borosilicate Beaker with Dry Mixture (Sand, Pebbles, Iron Filings) -->
-        <g transform="translate(430, 155)">
-          <ellipse cx="195" cy="382" rx="175" ry="18" fill="rgba(0,0,0,0.65)"/>
-          <!-- Sand & Pebble Bed at bottom -->
-          <path d="M36 275 Q115 262 195 272 Q275 282 354 268 L354 358 C354 370 344 376 330 376 L60 376 C46 376 36 370 36 358 Z" fill="url(#sandGrad)"/>
-          <!-- Fine Sand Grain Texture -->
-          <g fill="#fef08a" opacity="0.65">
-            <circle cx="72" cy="310" r="2.5"/><circle cx="95" cy="340" r="2"/><circle cx="135" cy="295" r="2.5"/>
-            <circle cx="165" cy="350" r="2"/><circle cx="210" cy="318" r="2.5"/><circle cx="248" cy="342" r="2"/>
-            <circle cx="290" cy="300" r="2.5"/><circle cx="320" cy="335" r="2"/><circle cx="115" cy="325" r="3"/>
-          </g>
-          <!-- Smooth River Pebbles -->
-          <g stroke="#475569" stroke-width="2">
-            <ellipse cx="88" cy="342" rx="22" ry="13" fill="#94a3b8" transform="rotate(-12 88 342)"/>
-            <ellipse cx="155" cy="332" rx="26" ry="15" fill="#64748b" transform="rotate(8 155 332)"/>
-            <ellipse cx="235" cy="346" rx="20" ry="12" fill="#cbd5e1" transform="rotate(-6 235 346)"/>
-            <ellipse cx="305" cy="334" rx="25" ry="14" fill="#94a3b8" transform="rotate(14 305 334)"/>
-            <ellipse cx="192" cy="356" rx="18" ry="11" fill="#475569"/>
-          </g>
-
-          <!-- Remaining Iron Filings in Mixture & Rising in Magnetic Field Stream -->
-          <g fill="#1e293b" stroke="#e2e8f0" stroke-width="1.2">
-            <!-- Filings still on sand surface -->
-            <rect x="115" y="276" width="10" height="3.5" rx="1.5" transform="rotate(-25 115 276)"/>
-            <rect x="180" y="272" width="11" height="3.5" rx="1.5" transform="rotate(-65 180 272)"/>
-            <rect x="260" y="278" width="10" height="3.5" rx="1.5" transform="rotate(-40 260 278)"/>
-            <!-- Filings leaping upward along magnetic field lines -->
-            <rect x="195" y="232" width="12" height="4" rx="2" transform="rotate(-70 195 232)"/>
-            <rect x="218" y="210" width="13" height="4" rx="2" transform="rotate(-60 218 210)"/>
-            <rect x="242" y="195" width="12" height="4" rx="2" transform="rotate(-80 242 195)"/>
-            <rect x="208" y="175" width="13" height="4" rx="2" transform="rotate(-55 208 175)"/>
-            <rect x="255" y="168" width="12" height="4" rx="2" transform="rotate(-75 255 168)"/>
-            <!-- Dense cluster of dark metallic iron filings clinging to North & South poles -->
-            <circle cx="215" cy="135" r="7" fill="#334155"/><circle cx="224" cy="142" r="6" fill="#1e293b"/>
-            <circle cx="206" cy="141" r="6.5" fill="#0f172a"/><circle cx="216" cy="149" r="5.5" fill="#334155"/>
-            <circle cx="278" cy="136" r="7" fill="#334155"/><circle cx="286" cy="143" r="6" fill="#1e293b"/>
-            <circle cx="270" cy="144" r="6" fill="#0f172a"/><circle cx="279" cy="151" r="5.5" fill="#334155"/>
-          </g>
-
-          <!-- Glowing Cyan Magnetic Flux Lines -->
-          <g fill="none" stroke="#22d3ee" stroke-width="2" stroke-dasharray="6 4" opacity="0.8" filter="url(#neonGlow)">
-            <path d="M214 140 C190 210, 175 245, 180 275"/>
-            <path d="M216 140 C225 190, 265 190, 278 140"/>
-            <path d="M280 140 C295 205, 275 245, 262 276"/>
-          </g>
-
-          <!-- Horseshoe Alnico Lab Magnet Lowered Into Beaker -->
-          <g transform="translate(185, -35)">
-            <path d="M20 145 V65 C20 22, 105 22, 105 65 V145" fill="none" stroke="url(#magnetRed)" stroke-width="26" stroke-linecap="butt"/>
-            <!-- Steel North & South Pole Tips -->
-            <rect x="7" y="135" width="26" height="32" rx="3" fill="url(#steelPole)" stroke="#475569" stroke-width="2"/>
-            <rect x="92" y="135" width="26" height="32" rx="3" fill="url(#steelPole)" stroke="#475569" stroke-width="2"/>
-            <text x="20" y="122" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="900">N</text>
-            <text x="105" y="122" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="900">S</text>
-          </g>
-
-          <!-- Beaker Glass Outline & White Enamel Graduations -->
-          <path d="M22 20 L34 32 L34 358 C34 372 46 380 62 380 L328 380 C344 380 356 372 356 358 L356 20" fill="url(#glassBody)" stroke="#f1f5f9" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-          <ellipse cx="195" cy="20" rx="166" ry="10" fill="rgba(255,255,255,0.08)" stroke="#f1f5f9" stroke-width="4"/>
-          <g stroke="rgba(248,250,252,0.78)" stroke-width="2.5" font-family="monospace" font-size="15" fill="#f8fafc" font-weight="bold">
-            <line x1="65" y1="85" x2="105" y2="85"/><text x="115" y="90" stroke="none">400 mL</text>
-            <line x1="65" y1="155" x2="105" y2="155"/><text x="115" y="160" stroke="none">300 mL</text>
-            <line x1="65" y1="225" x2="105" y2="225"/><text x="115" y="230" stroke="none">200 mL</text>
-            <line x1="65" y1="295" x2="105" y2="295"/><text x="115" y="300" stroke="none">100 mL</text>
-          </g>
-
-          <!-- Callout Labels for Classroom Inspection -->
-          <g font-family="sans-serif" font-weight="bold" font-size="15">
-            <rect x="380" y="75" width="245" height="44" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
-            <text x="502" y="102" text-anchor="middle" fill="#67e8f9">Iron Filings Attracted to Poles</text>
-            <line x1="380" y1="97" x2="295" y2="132" stroke="#22d3ee" stroke-width="2.5"/>
-
-            <rect x="380" y="285" width="245" height="44" rx="8" fill="#0f172a" stroke="#eab308" stroke-width="2"/>
-            <text x="502" y="312" text-anchor="middle" fill="#fde047">Non-Magnetic Sand &amp; Pebbles</text>
-            <line x1="380" y1="307" x2="325" y2="325" stroke="#eab308" stroke-width="2.5"/>
-          </g>
-
-          <text x="195" y="418" text-anchor="middle" fill="#38bdf8" font-family="sans-serif" font-size="18" font-weight="bold" letter-spacing="1">BEAKER A: MAGNETIC SEPARATION OF MIXTURE</text>
-        </g>
-      </svg>
-    `);
-
-    const DOK1_QUESTIONS = [
+    const QUESTION_BANK = [
       {
         id: "MAT-DOK1-01",
         benchmark: "SC.5.P.8.1",
@@ -1030,8 +847,8 @@
         type: "text",
         question: "What happens to the shape and volume of a gas when it is pumped into a closed glass container?",
         options: [
-          { text: "It takes the shape of the container but keeps a fixed volume", correct: false },
           { text: "It takes both the shape and the total volume of the container", correct: true },
+          { text: "It takes the shape of the container but keeps a fixed volume", correct: false },
           { text: "It keeps its original shape and original volume", correct: false },
           { text: "It keeps its original shape but expands in volume", correct: false }
         ],
@@ -1045,9 +862,9 @@
         type: "text",
         question: "According to the particle model of matter, all matter is made of particles that —",
         options: [
+          { text: "Are too small to be seen without magnification", correct: true },
           { text: "Can easily be seen with the naked human eye", correct: false },
           { text: "Stop moving completely whenever they become liquid", correct: false },
-          { text: "Are too small to be seen without magnification", correct: true },
           { text: "Disappear completely when a solid dissolves in water", correct: false }
         ],
         explanation: "All matter is composed of microscopic particles that cannot be seen without powerful magnification."
@@ -1057,13 +874,43 @@
         benchmark: "SC.5.P.8.1",
         dok: 1,
         category: "Measuring & Properties",
-        type: "image",
-        imageSrc: "images/pan_balance.webp",
-        imageAlt: "Mechanical two-pan balance measuring mass",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 400 220" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#94a3b8"/><stop offset="100%" stop-color="#475569"/></linearGradient>
+        <linearGradient id="brassGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#ca8a04"/></linearGradient>
+      </defs>
+      <!-- Base & Central Fulcrum Pillar -->
+      <path d="M 160 200 L 240 200 L 220 120 L 180 120 Z" fill="url(#metalGrad)" stroke="#334155" stroke-width="2"/>
+      <rect x="130" y="200" width="140" height="12" rx="4" fill="#334155"/>
+      <circle cx="200" cy="120" r="10" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+      <!-- Level Indicator Needle -->
+      <line x1="200" y1="120" x2="200" y2="175" stroke="#f43f5e" stroke-width="3" stroke-linecap="round"/>
+      <rect x="194" y="175" width="12" height="4" fill="#f43f5e"/>
+      <!-- Balance Crossbar -->
+      <line x1="70" y1="120" x2="330" y2="120" stroke="url(#metalGrad)" stroke-width="7" stroke-linecap="round"/>
+      <!-- Pan Strings & Left Pan -->
+      <line x1="90" y1="120" x2="60" y2="160" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="90" y1="120" x2="120" y2="160" stroke="#94a3b8" stroke-width="1.5"/>
+      <ellipse cx="90" cy="162" rx="35" ry="7" fill="#64748b" stroke="#cbd5e1" stroke-width="2"/>
+      <!-- Brass 50g Weight on Left Pan -->
+      <rect x="76" y="132" width="28" height="26" rx="2" fill="url(#brassGrad)" stroke="#a16207" stroke-width="1.5"/>
+      <circle cx="90" cy="130" r="4" fill="url(#brassGrad)"/>
+      <text x="90" y="150" font-size="10" font-weight="bold" fill="#713f12" text-anchor="middle">50g</text>
+      <!-- Pan Strings & Right Pan -->
+      <line x1="310" y1="120" x2="280" y2="160" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="310" y1="120" x2="340" y2="160" stroke="#94a3b8" stroke-width="1.5"/>
+      <ellipse cx="310" cy="162" rx="35" ry="7" fill="#64748b" stroke="#cbd5e1" stroke-width="2"/>
+      <!-- Mineral Specimen on Right Pan -->
+      <polygon points="295,158 300,135 320,132 328,145 322,158" fill="#64748b" stroke="#cbd5e1" stroke-width="2"/>
+      <!-- Instrument Tag -->
+      <rect x="135" y="15" width="130" height="24" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+      <text x="200" y="31" font-size="11" font-family="monospace" font-weight="bold" fill="#38bdf8" text-anchor="middle">PAN BALANCE</text>
+    </svg>`,
         question: "Which scientific tool is used to measure the mass of an object in grams?",
         options: [
-          { text: "Graduated cylinder", correct: false },
           { text: "Pan balance", correct: true },
+          { text: "Graduated cylinder", correct: false },
           { text: "Spring scale", correct: false },
           { text: "Metric ruler", correct: false }
         ],
@@ -1077,9 +924,9 @@
         type: "text",
         question: "Which metric unit of measurement is used to record the volume of a liquid sample?",
         options: [
+          { text: "Milliliters (mL)", correct: true },
           { text: "Grams (g)", correct: false },
           { text: "Centimeters (cm)", correct: false },
-          { text: "Milliliters (mL)", correct: true },
           { text: "Degrees Celsius (°C)", correct: false }
         ],
         explanation: "Liquid volume measures the amount of space an object takes up and is recorded in milliliters (mL) or liters (L)."
@@ -1089,15 +936,33 @@
         benchmark: "SC.5.P.8.1",
         dok: 1,
         category: "Measuring & Properties",
-        type: "image",
-        imageSrc: "images/sink_float.webp",
-        imageAlt: "Beaker of water with a floating wooden block and a sinking steel bolt",
-        question: "A plastic cube is placed in a tank of water and floats at the surface. What can you conclude about the cube?",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 360 220" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Water Tank -->
+      <rect x="60" y="40" width="240" height="150" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+      <!-- Water Fill -->
+      <path d="M 62 85 Q 120 80, 180 85 T 298 85 L 298 188 Q 298 188, 62 188 Z" fill="#0284c7" fill-opacity="0.35"/>
+      <!-- Water Line Indicator -->
+      <line x1="62" y1="85" x2="298" y2="85" stroke="#38bdf8" stroke-dasharray="4 2" stroke-width="1.5"/>
+      <text x="285" y="80" font-size="10" fill="#38bdf8" text-anchor="end">Water Surface</text>
+      <!-- Floating Wood Block -->
+      <rect x="95" y="70" width="45" height="30" rx="3" fill="#ca8a04" stroke="#fef08a" stroke-width="1.5"/>
+      <text x="117" y="88" font-size="9" font-weight="bold" fill="#422006" text-anchor="middle">WOOD</text>
+      <text x="117" y="118" font-size="11" font-weight="bold" fill="#38bdf8" text-anchor="middle">Floats</text>
+      <!-- Sinking Steel Bolt -->
+      <g transform="translate(225, 160)">
+        <polygon points="10,0 25,0 30,8 25,16 10,16 5,8" fill="#64748b" stroke="#cbd5e1" stroke-width="1.5"/>
+        <rect x="14" y="16" width="7" height="18" fill="#475569" stroke="#94a3b8" stroke-width="1"/>
+      </g>
+      <text x="242" y="152" font-size="9" font-weight="bold" fill="#cbd5e1" text-anchor="middle">STEEL</text>
+      <text x="242" y="198" font-size="11" font-weight="bold" fill="#f43f5e" text-anchor="middle">Sinks</text>
+    </svg>`,
+        question: "A block of wood is placed in a tank of water and floats at the surface. What can you conclude about the block?",
         options: [
-          { text: "The cube is less dense than water", correct: true },
-          { text: "The cube is more dense than water", correct: false },
-          { text: "The cube has more mass than any object that sinks", correct: false },
-          { text: "The cube dissolved into the water", correct: false }
+          { text: "The wood block is less dense than water", correct: true },
+          { text: "The wood block is more dense than water", correct: false },
+          { text: "The wood block has more mass than the water", correct: false },
+          { text: "The wood block dissolved into the water", correct: false }
         ],
         explanation: "Objects float if they are less dense than the liquid they are placed in, regardless of their total size or mass."
       },
@@ -1109,8 +974,8 @@
         type: "text",
         question: "What is true about the individual substances that make up a mixture?",
         options: [
-          { text: "They combine to form a brand new chemical substance", correct: false },
           { text: "They each maintain their own individual physical properties", correct: true },
+          { text: "They combine chemically to form a brand new substance", correct: false },
           { text: "They can never be separated once they are mixed together", correct: false },
           { text: "They always change their state of matter into a liquid", correct: false }
         ],
@@ -1136,30 +1001,61 @@
         benchmark: "SC.5.P.8.2",
         dok: 1,
         category: "Mixtures & Solutions",
-        type: "image",
-        imageSrc: "images/stirring_beaker.webp",
-        imageAlt: "Glass stir rod mixing sugar in a beaker of water",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 340 220" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Beaker Outline -->
+      <path d="M 90 35 L 90 190 Q 90 200, 105 200 L 235 200 Q 250 200, 250 190 L 250 35" fill="none" stroke="#94a3b8" stroke-width="3"/>
+      <!-- Liquid Fill -->
+      <path d="M 92 80 L 92 192 Q 92 198, 105 198 L 235 198 Q 248 198, 248 192 L 248 80 Z" fill="#06b6d4" fill-opacity="0.25"/>
+      <!-- Stirring Rod -->
+      <line x1="210" y1="20" x2="140" y2="180" stroke="#f8fafc" stroke-width="6" stroke-linecap="round" stroke-opacity="0.85"/>
+      <!-- Swirl Motion Arrows -->
+      <path d="M 130 110 A 30 15 0 1 1 200 110" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4 2"/>
+      <polygon points="202,106 208,114 198,116" fill="#38bdf8"/>
+      <!-- Dissolving Crystals -->
+      <circle cx="160" cy="155" r="3" fill="#ffffff"/>
+      <circle cx="175" cy="148" r="2.5" fill="#ffffff"/>
+      <circle cx="150" cy="165" r="2" fill="#ffffff"/>
+      <circle cx="185" cy="160" r="2.5" fill="#ffffff"/>
+      <text x="170" y="215" font-size="11" font-weight="bold" fill="#38bdf8" text-anchor="middle">Agitation / Stirring</text>
+    </svg>`,
         question: "Which of the following actions will SPEED UP how fast sugar dissolves in a beaker of water?",
         options: [
+          { text: "Stirring the water rapidly with a spoon", correct: true },
           { text: "Cooling the water with ice cubes", correct: false },
           { text: "Using a single large sugar cube instead of granulated sugar", correct: false },
-          { text: "Stirring the water rapidly with a spoon", correct: true },
           { text: "Letting the water sit completely undisturbed in the dark", correct: false }
         ],
-        explanation: "Stirring increases the contact between water molecules and sugar particles, accelerating the rate of dissolving."
+        explanation: "Stirring increases contact between water molecules and sugar particles, accelerating the rate of dissolving."
       },
       {
         id: "MAT-DOK1-10",
         benchmark: "SC.5.P.8.3",
         dok: 1,
         category: "Separating Matter",
-        type: "image",
-        imageSrc: "images/bar_magnet_iron.webp",
-        imageAlt: "Bar magnet attracting iron filings out of sand",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 360 220" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Dish Container -->
+      <ellipse cx="180" cy="170" rx="100" ry="25" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+      <!-- Sand Bed -->
+      <path d="M 100 170 Q 180 185, 260 170 Q 180 155, 100 170 Z" fill="#d97706" fill-opacity="0.6"/>
+      <text x="180" y="195" font-size="11" fill="#f59e0b" text-anchor="middle">Dry Sand (Non-Magnetic)</text>
+      <!-- Bar Magnet -->
+      <g transform="translate(145, 45)">
+        <rect x="0" y="0" width="35" height="55" fill="#ef4444" rx="3" stroke="#b91c1c" stroke-width="1.5"/>
+        <text x="17" y="32" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">N</text>
+        <rect x="35" y="0" width="35" height="55" fill="#94a3b8" rx="3" stroke="#64748b" stroke-width="1.5"/>
+        <text x="52" y="32" font-size="14" font-weight="bold" fill="#0f172a" text-anchor="middle">S</text>
+      </g>
+      <!-- Clinging Iron Filings -->
+      <path d="M 148 100 L 140 120 L 152 110 L 160 130 L 168 105 L 175 125 L 180 100" fill="none" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 148 100 L 140 120 L 152 110 L 160 130 L 168 105 L 175 125 L 180 100" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="120" y="115" font-size="10" font-weight="bold" fill="#38bdf8" text-anchor="end">Iron Filings Attracted</text>
+    </svg>`,
         question: "Which tool is best suited to separate iron filings from dry sand?",
         options: [
-          { text: "Filter paper and funnel", correct: false },
           { text: "Bar magnet", correct: true },
+          { text: "Filter paper and funnel", correct: false },
           { text: "Wire mesh sieve", correct: false },
           { text: "Hot plate", correct: false }
         ],
@@ -1173,8 +1069,8 @@
         type: "text",
         question: "Which tool would a scientist use to separate gravel from sand based on particle size?",
         options: [
-          { text: "A magnet", correct: false },
           { text: "A screen sieve", correct: true },
+          { text: "A bar magnet", correct: false },
           { text: "A thermometer", correct: false },
           { text: "A hot plate", correct: false }
         ],
@@ -1188,8 +1084,8 @@
         type: "text",
         question: "Which of the following is an example of a physical change?",
         options: [
-          { text: "Baking bread dough in an oven", correct: false },
           { text: "Tearing a sheet of notebook paper into small strips", correct: true },
+          { text: "Baking bread dough in an oven", correct: false },
           { text: "A metal bicycle chain rusting in the rain", correct: false },
           { text: "Burning a wooden log into ashes in a fireplace", correct: false }
         ],
@@ -1200,13 +1096,32 @@
         benchmark: "SC.5.P.9.1",
         dok: 1,
         category: "Changes in Matter",
-        type: "image",
-        imageSrc: "images/rust_nail.webp",
-        imageAlt: "Macro close-up of a rusty iron nail with pitting",
+        type: "svg",
+        visualPayload: `<svg viewBox="0 0 380 210" class="w-full h-56 mx-auto" xmlns="http://www.w3.org/2000/svg">
+      <!-- Divider -->
+      <line x1="190" y1="20" x2="190" y2="185" stroke="#334155" stroke-dasharray="4 4" stroke-width="2"/>
+      <!-- Left: Polished Nail -->
+      <text x="95" y="35" font-size="12" font-weight="bold" fill="#94a3b8" text-anchor="middle">SHINY IRON NAIL</text>
+      <rect x="90" y="55" width="10" height="95" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+      <polygon points="80,55 110,55 95,45" fill="#94a3b8" stroke="#475569" stroke-width="1.5"/>
+      <polygon points="90,150 100,150 95,168" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+      <text x="95" y="195" font-size="10" fill="#64748b" text-anchor="middle">Original Substance</text>
+      <!-- Right: Rusted Nail -->
+      <text x="285" y="35" font-size="12" font-weight="bold" fill="#ea580c" text-anchor="middle">RUSTED NAIL</text>
+      <rect x="280" y="55" width="10" height="95" fill="#b45309" stroke="#78350f" stroke-width="1.5"/>
+      <polygon points="270,55 300,55 285,45" fill="#b45309" stroke="#78350f" stroke-width="1.5"/>
+      <polygon points="280,150 290,150 285,168" fill="#b45309" stroke="#78350f" stroke-width="1.5"/>
+      <!-- Rust Texture Specks -->
+      <circle cx="282" cy="75" r="2.5" fill="#f97316"/>
+      <circle cx="288" cy="95" r="3" fill="#ea580c"/>
+      <circle cx="283" cy="115" r="2" fill="#fdba74"/>
+      <circle cx="287" cy="135" r="2.5" fill="#f97316"/>
+      <text x="285" y="195" font-size="10" font-weight="bold" fill="#f97316" text-anchor="middle">Chemical Change: Rust</text>
+    </svg>`,
         question: "Which observation provides the clearest evidence that a chemical change has occurred?",
         options: [
-          { text: "A solid block of ice melts into liquid water", correct: false },
           { text: "A shiny iron nail develops reddish-orange rust and pits", correct: true },
+          { text: "A solid block of ice melts into liquid water", correct: false },
           { text: "Liquid water boils and forms water vapor", correct: false },
           { text: "A glass beaker breaks into smaller glass pieces", correct: false }
         ],
@@ -1220,12 +1135,12 @@
         type: "text",
         question: "What temperature in degrees Celsius represents the freezing point of pure water?",
         options: [
+          { text: "0°C", correct: true },
           { text: "100°C", correct: false },
           { text: "32°C", correct: false },
-          { text: "0°C", correct: true },
           { text: "50°C", correct: false }
         ],
-        explanation: "Pure water freezes at 0°C (and boils at 100°C). 32° is Fahrenheit, which students often confuse with Celsius."
+        explanation: "Pure water freezes at 0°C (and boils at 100°C). 32° is Fahrenheit, which is often confused with Celsius."
       },
       {
         id: "MAT-DOK1-15",
@@ -1236,16 +1151,14 @@
         canvasModel: "particles-gas",
         question: "What phase change takes place when liquid water gains heat and turns into water vapor?",
         options: [
+          { text: "Evaporation", correct: true },
           { text: "Condensation", correct: false },
           { text: "Freezing", correct: false },
-          { text: "Evaporation", correct: true },
           { text: "Melting", correct: false }
         ],
         explanation: "Evaporation occurs when liquid particles absorb thermal energy and escape as gas (water vapor)."
       }
     ];
-
-    const QUESTION_BANK = DOK1_QUESTIONS;
 
     // =========================================================================
     // GAME STATE MACHINE
@@ -1440,18 +1353,18 @@
       const caption = document.getElementById("canvas-sim-caption");
 
       if (particleSim.mode === "particles-solid") {
-        if (caption) caption.textContent = "Solid Lattice: Particles vibrate in fixed 3D positions (Click to pulse heat)";
+        if (caption) caption.textContent = "Solid Lattice: Tightly packed geometric grid vibrating in fixed positions";
         const cols = 7;
         const rows = 4;
-        const spacingX = 36;
-        const spacingY = 32;
+        const spacingX = 34;
+        const spacingY = 30;
         const startX = (w - (cols - 1) * spacingX) / 2;
-        const startY = (h - (rows - 1) * spacingY) / 2 + 6;
+        const startY = (h - (rows - 1) * spacingY) / 2 + 4;
 
         for (let r = 0; r < rows; r++) {
           for (let c = 0; c < cols; c++) {
-            const zDepth = (r % 2 === 0 ? 0.92 : 1.08);
-            const homeX = startX + c * spacingX + (r % 2 === 0 ? -5 : 5);
+            const zDepth = (r % 2 === 0 ? 0.96 : 1.04);
+            const homeX = startX + c * spacingX;
             const homeY = startY + r * spacingY;
             particleSim.particles.push({
               x: homeX,
@@ -1462,7 +1375,7 @@
               vy: 0,
               radius: 10.5 * zDepth,
               z: zDepth,
-              phase: Math.random() * Math.PI * 2,
+              phase: (r * cols + c) * 0.55,
               color: "#06b6d4"
             });
           }
@@ -1485,18 +1398,19 @@
         }
       } else {
         // particles-gas
-        if (caption) caption.textContent = "Gas State: High-speed particles move freely and collide across the whole chamber";
-        const count = 18;
+        if (caption) caption.textContent = "Gas / Vapor State: Rapidly moving atoms bouncing off walls & escaping upward";
+        const count = 20;
         for (let i = 0; i < count; i++) {
-          const zDepth = 0.8 + Math.random() * 0.4;
-          const angle = Math.random() * Math.PI * 2;
-          const speed = 3.6 + Math.random() * 2.6;
+          const zDepth = 0.82 + Math.random() * 0.36;
+          const speedX = (Math.random() < 0.5 ? -1 : 1) * (3.2 + Math.random() * 2.6);
+          const speedY = -(2.2 + Math.random() * 2.8);
           particleSim.particles.push({
-            x: 40 + Math.random() * (w - 80),
-            y: 30 + Math.random() * (h - 60),
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed,
-            radius: 9.5 * zDepth,
+            x: 42 + Math.random() * (w - 84),
+            y: 24 + Math.random() * (h - 48),
+            vx: speedX,
+            vy: speedY,
+            escapes: i % 3 === 0,
+            radius: 9 * zDepth,
             z: zDepth,
             phase: Math.random() * Math.PI * 2,
             color: "#f59e0b"
@@ -1526,20 +1440,37 @@
       ctx.clearRect(0, 0, w, h);
 
       // Draw subtle 3D containment chamber grid lines
-      ctx.strokeStyle = "rgba(148, 163, 184, 0.14)";
-      ctx.lineWidth = 1;
-      ctx.strokeRect(18, 14, w - 36, h - 28);
-      ctx.beginPath();
-      ctx.moveTo(18, 14);
-      ctx.lineTo(36, 28);
-      ctx.moveTo(w - 18, 14);
-      ctx.lineTo(w - 36, 28);
-      ctx.moveTo(18, h - 14);
-      ctx.lineTo(36, h - 28);
-      ctx.moveTo(w - 18, h - 14);
-      ctx.lineTo(w - 36, h - 28);
-      ctx.strokeRect(36, 28, w - 72, h - 56);
-      ctx.stroke();
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.16)";
+      ctx.lineWidth = 1.2;
+      if (particleSim.mode === "particles-gas") {
+        // Open-top heated vessel walls for gas expansion & upward vapor escape
+        ctx.beginPath();
+        ctx.moveTo(24, 10);
+        ctx.lineTo(24, h - 14);
+        ctx.lineTo(w - 24, h - 14);
+        ctx.lineTo(w - 24, 10);
+        ctx.stroke();
+        // Subtle thermal glow strip at bottom
+        ctx.strokeStyle = "rgba(245, 158, 11, 0.35)";
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(40, h - 12);
+        ctx.lineTo(w - 40, h - 12);
+        ctx.stroke();
+      } else {
+        ctx.strokeRect(18, 14, w - 36, h - 28);
+        ctx.beginPath();
+        ctx.moveTo(18, 14);
+        ctx.lineTo(36, 28);
+        ctx.moveTo(w - 18, 14);
+        ctx.lineTo(w - 36, 28);
+        ctx.moveTo(18, h - 14);
+        ctx.lineTo(36, h - 28);
+        ctx.moveTo(w - 18, h - 14);
+        ctx.lineTo(w - 36, h - 28);
+        ctx.strokeRect(36, 28, w - 72, h - 56);
+        ctx.stroke();
+      }
 
       // Draw expanding thermal energy shockwave if user clicked
       if (particleSim.shockwave.active) {
@@ -1558,14 +1489,14 @@
 
       // Draw lattice bonds for solid state
       if (particleSim.mode === "particles-solid") {
-        ctx.strokeStyle = "rgba(6, 182, 212, 0.28)";
+        ctx.strokeStyle = "rgba(6, 182, 212, 0.32)";
         ctx.lineWidth = 2;
         for (let i = 0; i < pts.length; i++) {
           for (let j = i + 1; j < pts.length; j++) {
             const dx = pts[i].x - pts[j].x;
             const dy = pts[i].y - pts[j].y;
             const dist = Math.hypot(dx, dy);
-            if (dist < 44) {
+            if (dist < 42) {
               ctx.beginPath();
               ctx.moveTo(pts[i].x, pts[i].y);
               ctx.lineTo(pts[j].x, pts[j].y);
@@ -1580,8 +1511,8 @@
         const p = pts[i];
 
         if (particleSim.mode === "particles-solid") {
-          const jitterX = Math.sin(timestamp * 0.022 + p.phase) * 2.4;
-          const jitterY = Math.cos(timestamp * 0.026 + p.phase * 1.3) * 2.4;
+          const jitterX = Math.sin(timestamp * 0.024 + p.phase) * 2.1;
+          const jitterY = Math.cos(timestamp * 0.028 + p.phase * 1.3) * 2.1;
           p.vx *= 0.88;
           p.vy *= 0.88;
           p.x = p.homeX + jitterX + p.vx;
@@ -1620,14 +1551,29 @@
             }
           }
         } else {
-          // Gas state: high velocity elastic collisions across whole chamber
+          // Gas state: widely dispersed atoms moving rapidly, bouncing off walls and escaping upward
+          p.vy -= 0.018; // Slight thermal upward buoyancy
           p.x += p.vx;
           p.y += p.vy;
-          const pad = 26;
-          if (p.x < pad) { p.x = pad; p.vx = Math.abs(p.vx); }
-          if (p.x > w - pad) { p.x = w - pad; p.vx = -Math.abs(p.vx); }
-          if (p.y < pad) { p.y = pad; p.vy = Math.abs(p.vy); }
-          if (p.y > h - pad) { p.y = h - pad; p.vy = -Math.abs(p.vy); }
+          const padX = 32;
+          const padBottom = h - 24;
+
+          if (p.x < padX) { p.x = padX; p.vx = Math.abs(p.vx); }
+          if (p.x > w - padX) { p.x = w - padX; p.vx = -Math.abs(p.vx); }
+          if (p.y > padBottom) { p.y = padBottom; p.vy = -Math.abs(p.vy); }
+
+          if (p.escapes) {
+            // Escapes upward out of the container and respawns from the heated bottom
+            if (p.y < -12) {
+              p.x = 60 + Math.random() * (w - 120);
+              p.y = padBottom - 4;
+              p.vx = (Math.random() - 0.5) * 6.4;
+              p.vy = -(2.8 + Math.random() * 2.6);
+            }
+          } else if (p.y < 22) {
+            p.y = 22;
+            p.vy = Math.abs(p.vy);
+          }
         }
 
         // Draw 3D specular sphere
@@ -2163,82 +2109,8 @@
       loadQuestion();
     }
 
-    function escapeXmlText(str) {
-      return String(str || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&apos;");
-    }
-
-    function buildProceduralImagePlaceholder(imageTitle, imagePath, benchmark, category) {
-      const title = String(imageTitle || imagePath || "Laboratory Visual Evidence").trim();
-      const words = title.split(/\s+/);
-      let line1 = "";
-      let line2 = "";
-      words.forEach((word) => {
-        if ((line1 + " " + word).trim().length <= 44 || !line1) {
-          line1 = (line1 + " " + word).trim();
-        } else {
-          line2 = (line2 + " " + word).trim();
-        }
-      });
-      if (line2.length > 48) {
-        line2 = line2.slice(0, 45) + "...";
-      }
-
-      const safeLine1 = escapeXmlText(line1);
-      const safeLine2 = escapeXmlText(line2);
-      const safePath = escapeXmlText(imagePath || "images/lab_specimen.webp");
-      const safeMeta = escapeXmlText(`${category || "Matter Lab"} • ${benchmark || "SC.5.P"}`);
-
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 420" width="880" height="420">
-        <defs>
-          <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#090d16"/>
-            <stop offset="55%" stop-color="#0f172a"/>
-            <stop offset="100%" stop-color="#1e293b"/>
-          </linearGradient>
-          <linearGradient id="liqGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.88"/>
-            <stop offset="100%" stop-color="#10b981" stop-opacity="0.92"/>
-          </linearGradient>
-          <pattern id="gridPat" width="32" height="32" patternUnits="userSpaceOnUse">
-            <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(56,189,248,0.09)" stroke-width="1"/>
-          </pattern>
-        </defs>
-        <rect width="880" height="420" rx="20" fill="url(#bgGrad)"/>
-        <rect width="880" height="420" rx="20" fill="url(#gridPat)"/>
-        <rect x="10" y="10" width="860" height="400" rx="16" fill="none" stroke="rgba(6,182,212,0.45)" stroke-width="2.5" stroke-dasharray="10 6"/>
-
-        <!-- Top Benchmark & Category Pill -->
-        <rect x="270" y="26" width="340" height="32" rx="16" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5"/>
-        <text x="440" y="47" text-anchor="middle" fill="#67e8f9" font-family="monospace, sans-serif" font-size="14" font-weight="bold" letter-spacing="1.5">${safeMeta}</text>
-
-        <!-- Glowing Laboratory Beaker Icon -->
-        <g transform="translate(380, 74)">
-          <circle cx="60" cy="72" r="68" fill="rgba(6,182,212,0.12)" stroke="rgba(6,182,212,0.3)" stroke-width="1.5"/>
-          <path d="M35 16 H85 M42 16 V42 L20 106 C17 115 23 124 33 124 H87 C97 124 103 115 100 106 L78 42 V16" fill="rgba(15,23,42,0.85)" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M29 82 Q60 74 91 82 L97 104 C99 112 94 119 85 119 H35 C26 119 21 112 23 104 Z" fill="url(#liqGrad)"/>
-          <circle cx="48" cy="102" r="5" fill="#ecfeff" opacity="0.85"/>
-          <circle cx="68" cy="94" r="6.5" fill="#ecfeff" opacity="0.85"/>
-          <circle cx="58" cy="70" r="4" fill="#67e8f9" opacity="0.9"/>
-          <circle cx="73" cy="56" r="3" fill="#34d399" opacity="0.9"/>
-          <line x1="42" y1="62" x2="54" y2="62" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="36" y1="78" x2="50" y2="78" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
-        </g>
-
-        <!-- Image Title Readout -->
-        <text x="440" y="268" text-anchor="middle" fill="#f8fafc" font-family="sans-serif" font-size="25" font-weight="bold">${safeLine1}</text>
-        ${safeLine2 ? `<text x="440" y="302" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="22" font-weight="bold">${safeLine2}</text>` : ""}
-
-        <!-- Asset Path Tag -->
-        <rect x="250" y="338" width="380" height="36" rx="10" fill="rgba(15,23,42,0.9)" stroke="#334155" stroke-width="1.5"/>
-        <text x="440" y="361" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="14" font-weight="bold">🔬 LAB VISUAL: ${safePath}</text>
-      </svg>`;
-
-      return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    function sanitizeSvgPayload(rawSvg) {
+      return String(rawSvg || "").replace(/\[https?:\/\/[^\]]+\]\((https?:\/\/[^)]+)\)/g, "$1");
     }
 
     function loadQuestion() {
@@ -2264,50 +2136,32 @@
       // Ensure lightbox is closed when loading a new question
       closeImageLightbox();
 
-      // Configure Media Display Area ('text' | 'svg' | '3d-canvas' | 'image')
-      const imageStage = document.getElementById("media-image-stage");
-      const questionImageEl = document.getElementById("question-image-el");
+      // Configure Media Display Area ('svg' | '3d-canvas' | 'text')
+      const mediaContainer = document.getElementById("media-display-container");
       const svgStage = document.getElementById("media-svg-stage");
+      const svgContent = document.getElementById("media-svg-content");
       const canvasStage = document.getElementById("media-canvas-stage");
-      const textStage = document.getElementById("media-text-stage");
       const mediaBadge = document.getElementById("media-type-badge");
 
-      if (imageStage) imageStage.classList.add("hidden");
       svgStage.classList.add("hidden");
       canvasStage.classList.add("hidden");
-      textStage.classList.add("hidden");
 
-      if (q.type === "image" && (q.imageSrc || q.visualPayload)) {
-        mediaBadge.textContent = "HIGH-RES LAB IMAGERY";
-        particleSim.running = false;
-        const resolvedSrc = q.imageSrc || q.visualPayload;
-        const resolvedAlt = q.imageAlt || `${q.category} (${q.benchmark}) — Laboratory Visual Evidence`;
-        if (questionImageEl) {
-          questionImageEl.dataset.fallbackApplied = "false";
-          questionImageEl.onerror = function () {
-            if (this.dataset.fallbackApplied === "true") return;
-            this.dataset.fallbackApplied = "true";
-            this.src = buildProceduralImagePlaceholder(resolvedAlt, resolvedSrc, q.benchmark, q.category);
-          };
-          questionImageEl.alt = resolvedAlt;
-          questionImageEl.src = resolvedSrc;
-        }
-        if (imageStage) imageStage.classList.remove("hidden");
-      } else if (q.type === "3d-canvas") {
-        mediaBadge.textContent = "3D PARTICLE SIMULATOR";
-        canvasStage.classList.remove("hidden");
-        initParticleSimulation(q.canvasModel || q.visualPayload || "particles-solid");
-      } else if (q.type === "svg") {
+      if (q.type === "svg" && q.visualPayload) {
         mediaBadge.textContent = "LAB APPARATUS DIAGRAM";
         particleSim.running = false;
-        svgStage.innerHTML = q.visualPayload || "";
+        if (mediaContainer) mediaContainer.classList.remove("hidden");
+        if (svgContent) svgContent.innerHTML = sanitizeSvgPayload(q.visualPayload);
         svgStage.classList.remove("hidden");
+      } else if (q.type === "3d-canvas") {
+        mediaBadge.textContent = "3D PARTICLE SIMULATOR";
+        if (mediaContainer) mediaContainer.classList.remove("hidden");
+        canvasStage.classList.remove("hidden");
+        initParticleSimulation(q.canvasModel || q.visualPayload || "particles-solid");
       } else {
-        mediaBadge.textContent = "FIELD OBSERVATION LOG";
+        // type === 'text': Hide the media display frame completely so question & options expand cleanly
+        mediaBadge.textContent = "CONCEPTUAL INQUIRY";
         particleSim.running = false;
-        document.getElementById("media-text-content").textContent =
-          q.visualPayload || "Analyze the scientific inquiry prompt above carefully and choose the best evidence-based conclusion.";
-        textStage.classList.remove("hidden");
+        if (mediaContainer) mediaContainer.classList.add("hidden");
       }
 
       // Fisher-Yates Shuffle Answer Options
@@ -2565,32 +2419,20 @@
     // =========================================================================
     function openImageLightbox() {
       const q = QUESTION_BANK[gameState.currentQuestionIndex];
-      const questionImageEl = document.getElementById("question-image-el");
       const lightboxModal = document.getElementById("image-lightbox-modal");
-      const lightboxImg = document.getElementById("lightbox-image-el");
+      const lightboxSvgStage = document.getElementById("lightbox-svg-stage");
       const lightboxCaption = document.getElementById("lightbox-caption");
 
-      if (!lightboxModal || !lightboxImg) return;
+      if (!lightboxModal || !lightboxSvgStage || !q || q.type !== "svg" || !q.visualPayload) return;
 
-      const src = (questionImageEl && questionImageEl.getAttribute("src")) || (q && (q.imageSrc || q.visualPayload)) || "";
-      if (!src) return;
+      lightboxSvgStage.innerHTML = sanitizeSvgPayload(q.visualPayload);
+      const svgEl = lightboxSvgStage.querySelector("svg");
+      if (svgEl) {
+        svgEl.setAttribute("class", "w-full h-full max-h-[68vh] mx-auto select-none");
+      }
 
-      const alt = (questionImageEl && questionImageEl.getAttribute("alt")) || (q && q.imageAlt) || "Laboratory Evidence View";
-      lightboxImg.dataset.fallbackApplied = "false";
-      lightboxImg.onerror = function () {
-        if (this.dataset.fallbackApplied === "true") return;
-        this.dataset.fallbackApplied = "true";
-        this.src = buildProceduralImagePlaceholder(
-          alt,
-          q ? (q.imageSrc || q.visualPayload) : src,
-          q ? q.benchmark : "",
-          q ? q.category : ""
-        );
-      };
-      lightboxImg.alt = alt;
-      lightboxImg.src = src;
       if (lightboxCaption) {
-        lightboxCaption.textContent = alt;
+        lightboxCaption.textContent = `${q.category} (${q.benchmark}) — ${q.question}`;
       }
 
       lightboxModal.classList.remove("hidden");
